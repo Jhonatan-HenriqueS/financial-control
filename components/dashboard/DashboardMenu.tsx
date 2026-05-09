@@ -32,7 +32,7 @@ export function DashboardMenu({
 }: DashboardMenuProps) {
   return (
     <div
-      className={`fixed inset-0 z-[70] transition ${
+      className={`fixed inset-0 z-[70] h-dvh w-dvw overflow-hidden overscroll-none transition ${
         isOpen ? "pointer-events-auto" : "pointer-events-none"
       }`}
     >
@@ -47,7 +47,7 @@ export function DashboardMenu({
       />
 
       <aside
-        className={`absolute left-3 top-3 h-[calc(100vh-1.5rem)] w-[min(82vw,340px)] overflow-hidden rounded-[30px] bg-white/48 shadow-[0_24px_80px_rgba(15,23,42,0.28),0_0_0_1px_rgba(255,255,255,0.65)] backdrop-blur-[34px] backdrop-saturate-150 ${
+        className={`absolute bottom-3 left-3 top-3 w-[min(calc(100dvw-1.5rem),340px)] max-w-[calc(100dvw-1.5rem)] overflow-hidden rounded-[30px] bg-white/48 shadow-[0_24px_80px_rgba(15,23,42,0.28),0_0_0_1px_rgba(255,255,255,0.65)] backdrop-blur-[34px] backdrop-saturate-150 ${
           isOpen ? "animate-dashboard-menu-enter" : "animate-dashboard-menu-exit"
         }`}
       >

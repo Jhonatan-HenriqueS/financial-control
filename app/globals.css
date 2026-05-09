@@ -14,6 +14,12 @@
 }
 
 /* Estilo global do corpo da página. */
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);

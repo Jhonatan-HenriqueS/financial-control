@@ -2,7 +2,7 @@
 
 import { Menu, Moon, Sun } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { DashboardMenu } from "@/components/dashboard/DashboardMenu";
 import { getCurrentUser } from "@/lib/storage";
 
@@ -61,6 +61,25 @@ export function DashboardHeader() {
 
   // Transforma o nome completo salvo em saudacao curta.
   const firstName = getFirstName(currentUserName);
+
+  // Trava o scroll da pagina enquanto o menu esta aberto.
+  // Isso impede que o modal crie scroll indesejado no mobile.
+  useEffect(() => {
+    if (!isMenuMounted) {
+      return;
+    }
+
+    const previousBodyOverflow = document.body.style.overflow;
+    const previousHtmlOverflow = document.documentElement.style.overflow;
+
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousBodyOverflow;
+      document.documentElement.style.overflow = previousHtmlOverflow;
+    };
+  }, [isMenuMounted]);
 
   // Abre o menu ja no estado visivel.
   // Assim evitamos um flash visual em que ele monta fechado e logo depois abre.
