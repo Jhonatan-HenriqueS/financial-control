@@ -1,11 +1,18 @@
 import type { LoginCredentials, User } from "@/types/user";
 
+// Chave unica usada para guardar os usuarios no localStorage do navegador.
 const USERS_STORAGE_KEY = "financas:users";
 
+// Padroniza textos para comparacao.
+// Exemplo: "JOAO@email.com" e "joao@email.com" passam a ser tratados como iguais.
 const normalize = (value: string) => value.trim().toLowerCase();
 
+// Garante que localStorage so seja acessado no navegador.
+// No servidor do Next.js, window nao existe.
 const canUseStorage = () => typeof window !== "undefined";
 
+// Busca todos os usuarios salvos no localStorage.
+// Se nao existir nada salvo, devolve uma lista vazia.
 export function getUsers(): User[] {
   if (!canUseStorage()) {
     return [];
@@ -18,13 +25,17 @@ export function getUsers(): User[] {
   }
 
   try {
+    // JSON.parse transforma o texto salvo de volta em lista de objetos.
     const parsedUsers = JSON.parse(storedUsers);
     return Array.isArray(parsedUsers) ? (parsedUsers as User[]) : [];
   } catch {
+    // Se o localStorage estiver corrompido, a aplicacao continua funcionando.
     return [];
   }
 }
 
+// Salva a lista completa de usuarios no localStorage.
+// O localStorage guarda texto, entao a lista vira JSON antes de salvar.
 export function saveUsers(users: User[]) {
   if (!canUseStorage()) {
     return;
@@ -33,10 +44,14 @@ export function saveUsers(users: User[]) {
   window.localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(users));
 }
 
+// Verifica se ja existe uma conta com o mesmo email.
+// Isso evita cadastrar duas contas iguais.
 export function hasUserWithEmail(email: string) {
   return getUsers().some((user) => normalize(user.email) === normalize(email));
 }
 
+// Cadastra um novo usuario.
+// Primeiro checa duplicidade de email, depois adiciona o usuario na lista salva.
 export function registerUser(user: User) {
   if (hasUserWithEmail(user.email)) {
     return {
@@ -45,6 +60,7 @@ export function registerUser(user: User) {
     };
   }
 
+  // Cria uma nova lista preservando usuarios antigos e adicionando o novo.
   const nextUsers = [
     ...getUsers(),
     {
@@ -62,6 +78,8 @@ export function registerUser(user: User) {
   };
 }
 
+// Valida o login.
+// O usuario pode entrar com email OU nome, mas a senha precisa ser igual a salva.
 export function validateLogin({ identifier, password }: LoginCredentials) {
   const normalizedIdentifier = normalize(identifier);
 

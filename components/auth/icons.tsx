@@ -1,7 +1,10 @@
+// Propriedade comum para todos os icones.
+// className permite controlar tamanho e cor usando Tailwind no componente pai.
 interface IconProps {
   className?: string;
 }
 
+// Icone de usuario usado em campos de nome ou identificador.
 export function UserIcon({ className }: IconProps) {
   return (
     <svg className={className} viewBox="0 0 24 24" aria-hidden="true">
@@ -17,6 +20,7 @@ export function UserIcon({ className }: IconProps) {
   );
 }
 
+// Icone de email usado no campo de cadastro.
 export function MailIcon({ className }: IconProps) {
   return (
     <svg className={className} viewBox="0 0 24 24" aria-hidden="true">
@@ -32,6 +36,7 @@ export function MailIcon({ className }: IconProps) {
   );
 }
 
+// Icone de cadeado usado no campo de senha.
 export function LockIcon({ className }: IconProps) {
   return (
     <svg className={className} viewBox="0 0 24 24" aria-hidden="true">
@@ -47,6 +52,7 @@ export function LockIcon({ className }: IconProps) {
   );
 }
 
+// Icone de olho aberto para indicar que a senha pode ser exibida.
 export function EyeIcon({ className }: IconProps) {
   return (
     <svg className={className} viewBox="0 0 24 24" aria-hidden="true">
@@ -62,6 +68,7 @@ export function EyeIcon({ className }: IconProps) {
   );
 }
 
+// Icone de olho cortado para indicar que a senha pode ser escondida.
 export function EyeOffIcon({ className }: IconProps) {
   return (
     <svg className={className} viewBox="0 0 24 24" aria-hidden="true">

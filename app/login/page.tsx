@@ -22,6 +22,8 @@ export default function LoginPage() {
     password: "",
   });
 
+  //Altera o State com a mensagem do erro, ou seja, se a validação não passar, uma das mensagens é emitida
+
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setMessage("");
@@ -39,7 +41,11 @@ export default function LoginPage() {
       return;
     }
 
+    //A constante recebe toda validação, ela que decidi se o usuário é valido ou não
+
     const isValidUser = validateLogin({ identifier, password });
+
+    //Função para validar se os dados estão corretos
 
     if (!isValidUser) {
       setMessage("Email, nome de usuário ou senha incorretos.");
@@ -59,7 +65,7 @@ export default function LoginPage() {
             icon={UserIcon}
             type="text"
             autoComplete="Email ou Senha"
-            placeholder="User ou @mail.com"
+            placeholder="Seu nome ou @mail.com"
             value={identifier}
             onChange={(event) => {
               setIdentifier(event.target.value);
@@ -74,7 +80,7 @@ export default function LoginPage() {
             id="password"
             label="Senha"
             autoComplete="current-password"
-            placeholder="Senha"
+            placeholder="Sua senha"
             value={password}
             onChange={(event) => {
               setPassword(event.target.value);

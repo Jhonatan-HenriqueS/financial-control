@@ -1,11 +1,15 @@
 import type { ComponentType, InputHTMLAttributes } from "react";
 
+// Propriedades do input comum.
+// Ele aceita tudo que um input HTML aceita, mais label, icone e mensagem de erro.
 interface InputFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
   icon: ComponentType<{ className?: string }>;
   error?: string;
 }
 
+// Campo reutilizavel para textos como nome, email ou usuario.
+// Ele ja vem com icone, label, estilo visual e suporte a erro em vermelho.
 export function InputField({
   label,
   icon: Icon,
@@ -13,6 +17,8 @@ export function InputField({
   error,
   ...props
 }: InputFieldProps) {
+  // ID usado para ligar a mensagem de erro ao input.
+  // Isso ajuda leitores de tela a entenderem que o campo esta invalido.
   const errorId = error && id ? `${id}-error` : undefined;
 
   return (
@@ -30,6 +36,7 @@ export function InputField({
             : "ring-black/[0.02] focus-within:ring-[#ff7a00]/50"
         }`}
       >
+        {/* O icone fica sempre a esquerda para indicar o tipo de informacao esperada. */}
         <Icon className="mr-6 h-8 w-8 shrink-0 text-[#ff7300] sm:h-10 sm:w-10" />
         <input
           id={id}
@@ -39,6 +46,8 @@ export function InputField({
           {...props}
         />
       </div>
+
+      {/* Mensagem especifica do campo, exibida somente quando existe erro. */}
       {error ? (
         <p id={errorId} className="px-1 text-sm font-medium text-red-600">
           {error}

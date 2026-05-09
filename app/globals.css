@@ -1,26 +1,31 @@
 @import "tailwindcss";
 
+/* Cores base do projeto. Elas servem como fallback global. */
 :root {
   --background: #ffffff;
   --foreground: #171717;
 }
 
+/* Expõe variáveis para o Tailwind usar a fonte Poppins como font-sans. */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-poppins);
 }
 
+/* Estilo global do corpo da página. */
 body {
   background: var(--background);
   color: var(--foreground);
 }
 
+/* Inputs e botões herdam a fonte global para manter tudo consistente. */
 button,
 input {
   font: inherit;
 }
 
+/* Animação da ampulheta da página em desenvolvimento. */
 @keyframes soft-hourglass-spin {
   0% {
     transform: rotate(0deg);
@@ -36,6 +41,7 @@ input {
   }
 }
 
+/* Classe reutilizável que aplica a rotação contínua da ampulheta. */
 .animate-hourglass {
   animation: soft-hourglass-spin 1.7s ease-in-out infinite;
 }
