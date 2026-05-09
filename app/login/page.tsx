@@ -65,7 +65,7 @@ export default function LoginPage() {
             icon={UserIcon}
             type="text"
             autoComplete="Email ou Senha"
-            placeholder="Seu nome ou @mail.com"
+            placeholder="Nome ou @mail.com"
             value={identifier}
             onChange={(event) => {
               setIdentifier(event.target.value);
@@ -80,7 +80,7 @@ export default function LoginPage() {
             id="password"
             label="Senha"
             autoComplete="current-password"
-            placeholder="Sua senha"
+            placeholder="Senha"
             value={password}
             onChange={(event) => {
               setPassword(event.target.value);
@@ -90,7 +90,7 @@ export default function LoginPage() {
             error={fieldErrors.password}
           />
 
-          <div className="flex flex-col gap-5 text-[1.05rem] font-medium sm:flex-row sm:items-center sm:justify-between sm:text-[1.34rem]">
+          <div className="flex flex-col gap-5 text-sm font-medium sm:flex-row sm:items-center sm:justify-between sm:text-base">
             <a
               href="#"
               className="text-[#ff7300] transition hover:text-[#e45f00]"
@@ -104,7 +104,7 @@ export default function LoginPage() {
           <AuthButton type="submit">Entrar</AuthButton>
         </form>
 
-        <p className="mt-10 text-center text-[1.05rem] font-medium text-[#23272c] sm:text-left sm:text-[1.45rem]">
+        <p className="mt-10 text-center text-sm font-medium text-[#23272c] sm:text-left sm:text-lg">
           Não Tem Uma Conta?{" "}
           <Link
             href="/cadastro"

@@ -12,10 +12,10 @@ export default function DesenvolvimentoPage() {
         </div>
 
         {/* Texto principal da pagina em desenvolvimento. */}
-        <h1 className="mt-9 text-3xl font-extrabold text-[#24282d] sm:text-5xl">
+        <h1 className="mt-9 text-2xl font-extrabold text-[#24282d] sm:text-4xl">
           Página em <span className="text-[#ff7300]">desenvolvimento...</span>
         </h1>
-        <p className="mt-5 max-w-xl text-lg font-medium leading-8 text-[#24282d] sm:text-2xl">
+        <p className="mt-5 max-w-xl text-base font-medium leading-7 text-[#24282d] sm:text-xl">
           Em breve esta área estará pronta para uso.
         </p>
       </section>

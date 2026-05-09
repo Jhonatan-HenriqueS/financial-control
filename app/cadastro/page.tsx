@@ -88,7 +88,7 @@ export default function CadastroPage() {
             icon={UserIcon}
             type="text"
             autoComplete="name"
-            placeholder="Seu nome"
+            placeholder="Nome"
             value={name}
             onChange={(event) => {
               // Atualiza o nome e remove o erro do campo quando o usuario digita.
@@ -105,7 +105,7 @@ export default function CadastroPage() {
             icon={MailIcon}
             type="email"
             autoComplete="email"
-            placeholder="Seu @mail.com"
+            placeholder="@mail.com"
             value={email}
             onChange={(event) => {
               // Atualiza o email e limpa qualquer erro antigo do campo.
@@ -121,7 +121,7 @@ export default function CadastroPage() {
               id="signup-password"
               label="Senha"
               autoComplete="new-password"
-              placeholder="Sua senha"
+              placeholder="Senha"
               value={password}
               onChange={(event) => {
                 // Atualiza a senha e remove erro visual enquanto o usuario corrige.
@@ -132,7 +132,7 @@ export default function CadastroPage() {
               error={fieldErrors.password}
             />
             {/* Orientacao fixa para o usuario saber a regra antes de enviar. */}
-            <p className="px-1 text-sm font-medium text-[#8a8d92] sm:text-base">
+            <p className="px-1 text-xs font-medium text-[#8a8d92] sm:text-sm">
               Use uma senha forte com no mínimo 6 caracteres.
             </p>
           </div>
@@ -143,7 +143,7 @@ export default function CadastroPage() {
         </form>
 
         {/* Atalho para voltar ao login quando a pessoa ja tem uma conta. */}
-        <p className="mt-10 text-center text-[1.05rem] font-medium text-[#23272c] sm:text-left sm:text-[1.45rem]">
+        <p className="mt-10 text-center text-sm font-medium text-[#23272c] sm:text-left sm:text-lg">
           Já Tem Uma Conta?{" "}
           <Link
             href="/login"

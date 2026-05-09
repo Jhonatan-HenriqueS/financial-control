@@ -19,7 +19,7 @@ export function AuthCard({ title, children }: AuthCardProps) {
       <div className="pointer-events-none absolute inset-0 rounded-[inherit] ring-1 ring-inset ring-white/58" />
 
       <div className="relative z-10">
-        <h1 className="text-center text-[clamp(2.25rem,7vw,3.65rem)] font-extrabold leading-none text-[#2b2f33]">
+        <h1 className="text-center text-[clamp(1.9rem,5.8vw,3rem)] font-extrabold leading-none text-[#2b2f33]">
           {title}
         </h1>
         {/* Area que segura o formulario e limita a largura dos campos. */}
