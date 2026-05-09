@@ -1,0 +1,113 @@
+"use client";
+
+import Link from "next/link";
+import { FormEvent, useState } from "react";
+import { useRouter } from "next/navigation";
+import { AuthButton } from "@/components/auth/AuthButton";
+import { AuthCard } from "@/components/auth/AuthCard";
+import { AuthLayout } from "@/components/auth/AuthLayout";
+import { FormMessage } from "@/components/auth/FormMessage";
+import { InputField } from "@/components/auth/InputField";
+import { PasswordInput } from "@/components/auth/PasswordInput";
+import { UserIcon } from "@/components/auth/icons";
+import { validateLogin } from "@/lib/storage";
+
+export default function LoginPage() {
+  const router = useRouter();
+  const [identifier, setIdentifier] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({
+    identifier: "",
+    password: "",
+  });
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setMessage("");
+
+    const nextFieldErrors = {
+      identifier: identifier.trim()
+        ? ""
+        : "Informe seu email ou nome de usuário.",
+      password: password.trim() ? "" : "Informe sua senha.",
+    };
+
+    setFieldErrors(nextFieldErrors);
+
+    if (nextFieldErrors.identifier || nextFieldErrors.password) {
+      return;
+    }
+
+    const isValidUser = validateLogin({ identifier, password });
+
+    if (!isValidUser) {
+      setMessage("Email, nome de usuário ou senha incorretos.");
+      return;
+    }
+
+    router.push("/desenvolvimento");
+  }
+
+  return (
+    <AuthLayout>
+      <AuthCard title="LOGIN">
+        <form className="space-y-8" onSubmit={handleSubmit} noValidate>
+          <InputField
+            id="identifier"
+            label="Email ou Senha"
+            icon={UserIcon}
+            type="text"
+            autoComplete="Email ou Senha"
+            placeholder="User ou @mail.com"
+            value={identifier}
+            onChange={(event) => {
+              setIdentifier(event.target.value);
+              setFieldErrors((current) => ({ ...current, identifier: "" }));
+              setMessage("");
+            }}
+            aria-label="Email ou nome de usuário"
+            error={fieldErrors.identifier}
+          />
+
+          <PasswordInput
+            id="password"
+            label="Senha"
+            autoComplete="current-password"
+            placeholder="Senha"
+            value={password}
+            onChange={(event) => {
+              setPassword(event.target.value);
+              setFieldErrors((current) => ({ ...current, password: "" }));
+              setMessage("");
+            }}
+            error={fieldErrors.password}
+          />
+
+          <div className="flex flex-col gap-5 text-[1.05rem] font-medium sm:flex-row sm:items-center sm:justify-between sm:text-[1.34rem]">
+            <a
+              href="#"
+              className="text-[#ff7300] transition hover:text-[#e45f00]"
+            >
+              Esqueceu a Senha?
+            </a>
+          </div>
+
+          <FormMessage message={message} />
+
+          <AuthButton type="submit">Entrar</AuthButton>
+        </form>
+
+        <p className="mt-10 text-center text-[1.05rem] font-medium text-[#23272c] sm:text-left sm:text-[1.45rem]">
+          Não Tem Uma Conta?{" "}
+          <Link
+            href="/cadastro"
+            className="text-[#ff7300] underline underline-offset-4 transition hover:text-[#e45f00]"
+          >
+            Inscrever-se
+          </Link>
+        </p>
+      </AuthCard>
+    </AuthLayout>
+  );
+}
