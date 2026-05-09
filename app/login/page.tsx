@@ -61,10 +61,10 @@ export default function LoginPage() {
         <form className="space-y-8" onSubmit={handleSubmit} noValidate>
           <InputField
             id="identifier"
-            label="Email ou Senha"
+            label="Nome ou email"
             icon={UserIcon}
             type="text"
-            autoComplete="Email ou Senha"
+            autoComplete="Nome ou email"
             placeholder="Nome ou @mail.com"
             value={identifier}
             onChange={(event) => {
