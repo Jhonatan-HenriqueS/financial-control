@@ -10,7 +10,7 @@ import { FormMessage } from "@/components/auth/FormMessage";
 import { InputField } from "@/components/auth/InputField";
 import { PasswordInput } from "@/components/auth/PasswordInput";
 import { UserIcon } from "@/components/auth/icons";
-import { validateLogin } from "@/lib/storage";
+import { findAuthenticatedUser, saveCurrentUser } from "@/lib/storage";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -41,18 +41,19 @@ export default function LoginPage() {
       return;
     }
 
-    //A constante recebe toda validação, ela que decidi se o usuário é valido ou não
+    // A constante recebe o usuario encontrado no localStorage.
+    // Se vier null, significa que email/nome ou senha nao bateram.
+    const authenticatedUser = findAuthenticatedUser({ identifier, password });
 
-    const isValidUser = validateLogin({ identifier, password });
-
-    //Função para validar se os dados estão corretos
-
-    if (!isValidUser) {
+    if (!authenticatedUser) {
       setMessage("Email, nome de usuário ou senha incorretos.");
       return;
     }
 
-    router.push("/desenvolvimento");
+    // Salva quem entrou para que a proxima pagina consiga mostrar "Ola, Nome".
+    saveCurrentUser(authenticatedUser);
+
+    router.push("/dashboard");
   }
 
   return (

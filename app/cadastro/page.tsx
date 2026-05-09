@@ -12,6 +12,14 @@ import { PasswordInput } from "@/components/auth/PasswordInput";
 import { MailIcon, UserIcon } from "@/components/auth/icons";
 import { registerUser } from "@/lib/storage";
 
+// Regex simples para aceitar apenas textos com formato de email.
+// Ela exige texto antes do @, texto depois do @ e um domínio com ponto.
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// Verifica se o valor digitado parece um email real.
+// Exemplo aceito: pessoa@email.com. Exemplo recusado: pessoa-sem-arroba.
+const isValidEmail = (value: string) => EMAIL_PATTERN.test(value.trim());
+
 // Esta pagina cria um usuario novo no localStorage.
 // Ela simula um cadastro real, mas sem backend e sem banco externo.
 export default function CadastroPage() {
@@ -47,6 +55,12 @@ export default function CadastroPage() {
       email: email.trim() ? "" : "Informe seu email.",
       password: password.trim() ? "" : "Informe sua senha.",
     };
+
+    // Se o campo email foi preenchido, ele precisa ter formato de email.
+    // Assim o cadastro nao aceita nome, apelido ou texto solto no lugar do email.
+    if (email.trim() && !isValidEmail(email)) {
+      nextFieldErrors.email = "Informe um email válido.";
+    }
 
     // Depois valida a regra minima da senha.
     // O erro aparece no campo de senha, nao como alerta do navegador.

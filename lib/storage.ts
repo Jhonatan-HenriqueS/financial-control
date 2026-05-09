@@ -3,6 +3,10 @@ import type { LoginCredentials, User } from "@/types/user";
 // Chave unica usada para guardar os usuarios no localStorage do navegador.
 const USERS_STORAGE_KEY = "financas:users";
 
+// Chave usada para guardar quem fez login por ultimo.
+// A nova pagina usa esse dado para mostrar "Ola, Nome".
+const CURRENT_USER_STORAGE_KEY = "financas:current-user";
+
 // Padroniza textos para comparacao.
 // Exemplo: "JOAO@email.com" e "joao@email.com" passam a ser tratados como iguais.
 const normalize = (value: string) => value.trim().toLowerCase();
@@ -80,13 +84,54 @@ export function registerUser(user: User) {
 
 // Valida o login.
 // O usuario pode entrar com email OU nome, mas a senha precisa ser igual a salva.
-export function validateLogin({ identifier, password }: LoginCredentials) {
+export function findAuthenticatedUser({
+  identifier,
+  password,
+}: LoginCredentials) {
   const normalizedIdentifier = normalize(identifier);
 
-  return getUsers().some((user) => {
-    const emailMatches = normalize(user.email) === normalizedIdentifier;
-    const nameMatches = normalize(user.name) === normalizedIdentifier;
+  return (
+    getUsers().find((user) => {
+      const emailMatches = normalize(user.email) === normalizedIdentifier;
+      const nameMatches = normalize(user.name) === normalizedIdentifier;
 
-    return (emailMatches || nameMatches) && user.password === password;
-  });
+      return (emailMatches || nameMatches) && user.password === password;
+    }) ?? null
+  );
+}
+
+// Mantem a funcao antiga para qualquer parte do projeto que precise apenas de true/false.
+// Por baixo ela usa a busca do usuario autenticado.
+export function validateLogin(credentials: LoginCredentials) {
+  return Boolean(findAuthenticatedUser(credentials));
+}
+
+// Salva o usuario autenticado atual.
+// Isso permite que a proxima pagina saiba qual nome deve exibir no topo.
+export function saveCurrentUser(user: User) {
+  if (!canUseStorage()) {
+    return;
+  }
+
+  window.localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(user));
+}
+
+// Busca o usuario autenticado atual.
+// Se nao houver usuario salvo ou o dado estiver quebrado, devolve null.
+export function getCurrentUser(): User | null {
+  if (!canUseStorage()) {
+    return null;
+  }
+
+  const storedUser = window.localStorage.getItem(CURRENT_USER_STORAGE_KEY);
+
+  if (!storedUser) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(storedUser) as User;
+  } catch {
+    return null;
+  }
 }
