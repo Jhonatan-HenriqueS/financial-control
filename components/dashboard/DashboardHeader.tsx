@@ -22,7 +22,7 @@ function getFirstName(name?: string) {
 // Estilo compartilhado dos botoes do header.
 // Usa laranja bem suave para combinar com o fundo sem pesar visualmente.
 const headerButtonClass =
-  "flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-[#ffb35c]/35 bg-[linear-gradient(135deg,rgba(255,255,255,0.78),rgba(255,235,208,0.72))] text-black shadow-[0_8px_24px_rgba(255,121,0,0.12)] transition hover:border-[#ff9a2a]/50 hover:bg-[linear-gradient(135deg,rgba(255,255,255,0.9),rgba(255,226,188,0.86))] focus:outline-none focus:ring-4 focus:ring-[#ff9a2a]/15";
+  "flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-[#ffb35c]/35 bg-[linear-gradient(135deg,rgba(255,255,255,0.78),rgba(255,235,208,0.72))] text-[#d95f00] shadow-[0_8px_24px_rgba(255,121,0,0.12)] transition hover:border-[#ff9a2a]/50 hover:bg-[linear-gradient(135deg,rgba(255,255,255,0.9),rgba(255,226,188,0.86))] focus:outline-none focus:ring-4 focus:ring-[#ff9a2a]/15";
 
 // Header principal da pagina logada.
 // Ele replica o card da imagem: botao de menu, nome da pagina, saudacao e botao de tema.
