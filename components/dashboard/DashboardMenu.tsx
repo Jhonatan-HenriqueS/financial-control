@@ -22,6 +22,7 @@ function getUserInitials(name: string) {
 
 // Menu lateral em formato de modal.
 // Ele usa o mesmo comportamento em mobile, tablet e desktop: abre sobre a pagina e desfoca o fundo.
+// A prop isOpen controla a animacao: true vem da esquerda para a direita, false volta da direita para a esquerda.
 export function DashboardMenu({
   isOpen,
   pageName,
@@ -29,21 +30,27 @@ export function DashboardMenu({
   userEmail,
   onClose,
 }: DashboardMenuProps) {
-  if (!isOpen) {
-    return null;
-  }
-
   return (
-    <div className="fixed inset-0 z-[70]">
+    <div
+      className={`fixed inset-0 z-[70] transition ${
+        isOpen ? "pointer-events-auto" : "pointer-events-none"
+      }`}
+    >
       {/* Camada que escurece e desfoca a pagina enquanto o menu esta aberto. */}
       <button
         type="button"
         aria-label="Fechar menu"
         onClick={onClose}
-        className="absolute inset-0 bg-slate-950/42 backdrop-blur-md"
+        className={`absolute inset-0 bg-slate-950/42 backdrop-blur-md transition-opacity duration-200 ease-out ${
+          isOpen ? "opacity-100" : "opacity-0"
+        }`}
       />
 
-      <aside className="absolute left-3 top-3 h-[calc(100vh-1.5rem)] w-[min(82vw,340px)] overflow-hidden rounded-[30px] bg-white/48 shadow-[0_24px_80px_rgba(15,23,42,0.28),0_0_0_1px_rgba(255,255,255,0.65)] backdrop-blur-[34px] backdrop-saturate-150">
+      <aside
+        className={`absolute left-3 top-3 h-[calc(100vh-1.5rem)] w-[min(82vw,340px)] overflow-hidden rounded-[30px] bg-white/48 shadow-[0_24px_80px_rgba(15,23,42,0.28),0_0_0_1px_rgba(255,255,255,0.65)] backdrop-blur-[34px] backdrop-saturate-150 ${
+          isOpen ? "animate-dashboard-menu-enter" : "animate-dashboard-menu-exit"
+        }`}
+      >
         {/* Fundo do menu com vidro claro e manchas suaves na paleta laranja do projeto. */}
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_0%_0%,rgba(255,153,45,0.28),transparent_35%),radial-gradient(circle_at_100%_95%,rgba(255,183,64,0.18),transparent_42%),linear-gradient(160deg,rgba(255,255,255,0.72),rgba(255,248,238,0.48))]" />
 
@@ -78,7 +85,7 @@ export function DashboardMenu({
               <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-white/55 text-[#d95f00] shadow-[0_8px_20px_rgba(15,23,42,0.08)]">
                 <LayoutDashboard size={20} strokeWidth={2.1} />
               </span>
-              <span className="text-sm font-bold">{pageName}</span>
+              <span className="text-sm font-semibold">{pageName}</span>
             </button>
           </nav>
 

@@ -45,3 +45,37 @@ input {
 .animate-hourglass {
   animation: soft-hourglass-spin 1.7s ease-in-out infinite;
 }
+
+/* Menu abrindo: nasce fora da tela à esquerda e desliza para a direita. */
+@keyframes dashboard-menu-enter {
+  from {
+    opacity: 0;
+    transform: translateX(-105%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Menu fechando: sai da posição atual voltando da direita para a esquerda. */
+@keyframes dashboard-menu-exit {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-105%);
+  }
+}
+
+/* Classe usada quando o menu entra na tela. */
+.animate-dashboard-menu-enter {
+  animation: dashboard-menu-enter 180ms ease-out forwards;
+}
+
+/* Classe usada quando o menu sai da tela. */
+.animate-dashboard-menu-exit {
+  animation: dashboard-menu-exit 180ms ease-in forwards;
+}
