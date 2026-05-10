@@ -1,6 +1,6 @@
 "use client";
 
-import { Folder, LayoutDashboard, Settings, X } from "lucide-react";
+import { Folder, LayoutDashboard, Settings, WalletCards, X } from "lucide-react";
 import type { ComponentType } from "react";
 import type { DashboardPageKey } from "@/components/dashboard/DashboardShell";
 
@@ -28,6 +28,10 @@ const menuItems: MenuItem[] = [
   {
     icon: Folder,
     label: "Categorias",
+  },
+  {
+    icon: WalletCards,
+    label: "Gastos",
   },
 ];
 

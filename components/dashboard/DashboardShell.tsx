@@ -5,10 +5,11 @@ import { useEffect, useState, useSyncExternalStore } from "react";
 import { useRouter } from "next/navigation";
 import { CategoriesContent } from "@/components/dashboard/CategoriesContent";
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { GastosContent } from "@/components/dashboard/GastosContent";
 import { clearAuthSession, hasAuthSession } from "@/lib/session";
 import { getCurrentUser } from "@/lib/storage";
 
-export type DashboardPageKey = "Dashboard" | "Categorias";
+export type DashboardPageKey = "Dashboard" | "Categorias" | "Gastos";
 
 // Conteudo renderizado quando o usuario escolhe Dashboard no menu.
 function DashboardContent() {
@@ -20,12 +21,18 @@ function CategoriasContent() {
   return <CategoriesContent />;
 }
 
+// Conteudo renderizado quando o usuario escolhe Gastos no menu.
+function GastosPageContent() {
+  return <GastosContent />;
+}
+
 // Decide qual componente aparece abaixo do header.
 // Essa funcao substitui a troca de rotas por renderizacao condicional de componentes.
 function renderSelectedPage(page: DashboardPageKey) {
   const pages: Record<DashboardPageKey, ReactNode> = {
     Dashboard: <DashboardContent />,
     Categorias: <CategoriasContent />,
+    Gastos: <GastosPageContent />,
   };
 
   return pages[page];

@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
+import { Poppins, Geist } from "next/font/google";
 import "./globals.css";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+
 
 // Carrega a fonte Poppins pelo next/font.
 // O Next baixa e otimiza a fonte para evitar carregamento externo no navegador.
@@ -24,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" className={`${poppins.variable} h-full antialiased`}>
+    <html lang="pt-BR" className={cn("h-full", "antialiased", poppins.variable, "font-sans", geist.variable)}>
       {/* body recebe a fonte global e ocupa a altura minima da tela. */}
       <body className="min-h-full font-sans">{children}</body>
     </html>
