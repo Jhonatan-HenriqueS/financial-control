@@ -1,14 +1,35 @@
 "use client";
 
-import { LayoutDashboard, Settings, X } from "lucide-react";
+import { Folder, LayoutDashboard, Settings, X } from "lucide-react";
+import type { ComponentType } from "react";
+import type { DashboardPageKey } from "@/components/dashboard/DashboardShell";
 
 interface DashboardMenuProps {
   isOpen: boolean;
-  pageName: string;
+  currentPage: DashboardPageKey;
   userName: string;
   userEmail: string;
+  onPageChange: (page: DashboardPageKey) => void;
   onClose: () => void;
 }
+
+interface MenuItem {
+  icon: ComponentType<{ size?: number; strokeWidth?: number }>;
+  label: DashboardPageKey;
+}
+
+// Itens exibidos no menu.
+// Cada item tem icone e texto; o clique troca o componente renderizado, nao a rota.
+const menuItems: MenuItem[] = [
+  {
+    icon: LayoutDashboard,
+    label: "Dashboard",
+  },
+  {
+    icon: Folder,
+    label: "Categorias",
+  },
+];
 
 // Pega as duas primeiras letras do nome para montar o avatar textual.
 // Exemplo: "Jhonatan Vordal" vira "JV".
@@ -25,9 +46,10 @@ function getUserInitials(name: string) {
 // A prop isOpen controla a animacao: true vem da esquerda para a direita, false volta da direita para a esquerda.
 export function DashboardMenu({
   isOpen,
-  pageName,
+  currentPage,
   userName,
   userEmail,
+  onPageChange,
   onClose,
 }: DashboardMenuProps) {
   return (
@@ -76,17 +98,35 @@ export function DashboardMenu({
             </button>
           </div>
 
-          <nav className="mt-10 flex-1">
-            {/* Item ativo do menu. Hoje existe apenas Dashboard, por isso ele fica destacado. */}
-            <button
-              type="button"
-              className="flex w-full items-center gap-3 rounded-[24px] bg-[linear-gradient(135deg,rgba(255,150,36,0.26),rgba(255,183,64,0.18))] px-4 py-3 text-left text-slate-950 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.42),0_12px_26px_rgba(255,135,0,0.12)]"
-            >
-              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-white/55 text-[#d95f00] shadow-[0_8px_20px_rgba(15,23,42,0.08)]">
-                <LayoutDashboard size={20} strokeWidth={2.1} />
-              </span>
-              <span className="text-sm font-semibold">{pageName}</span>
-            </button>
+          <nav className="mt-10 flex-1 space-y-2">
+            {menuItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = item.label === currentPage;
+
+              return (
+                <button
+                  key={item.label}
+                  type="button"
+                  onClick={() => onPageChange(item.label)}
+                  className={`flex w-full items-center gap-3 rounded-[24px] px-4 py-3 text-left transition focus:outline-none focus:ring-4 focus:ring-[#ff9a2a]/15 ${
+                    isActive
+                      ? "bg-[linear-gradient(135deg,rgba(255,150,36,0.26),rgba(255,183,64,0.18))] text-slate-950 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.42),0_12px_26px_rgba(255,135,0,0.12)]"
+                      : "text-slate-500 hover:bg-white/42 hover:text-slate-950"
+                  }`}
+                >
+                  <span
+                    className={`grid h-11 w-11 shrink-0 place-items-center rounded-2xl shadow-[0_8px_20px_rgba(15,23,42,0.08)] ${
+                      isActive
+                        ? "bg-white/55 text-[#d95f00]"
+                        : "bg-white/36 text-slate-500"
+                    }`}
+                  >
+                    <Icon size={20} strokeWidth={2.1} />
+                  </span>
+                  <span className="text-sm font-semibold">{item.label}</span>
+                </button>
+              );
+            })}
           </nav>
 
           <div className="rounded-[26px] bg-white/55 p-3 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.62),0_14px_38px_rgba(15,23,42,0.12)]">

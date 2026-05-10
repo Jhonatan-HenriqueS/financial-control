@@ -1,20 +1,10 @@
 "use client";
 
 import { Menu, Moon, Sun } from "lucide-react";
-import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useRef, useState, useSyncExternalStore } from "react";
 import { DashboardMenu } from "@/components/dashboard/DashboardMenu";
+import type { DashboardPageKey } from "@/components/dashboard/DashboardShell";
 import { getCurrentUser } from "@/lib/storage";
-
-// Transforma o caminho da URL em nome de pagina.
-// Exemplo: "/dashboard" vira "DASHBOARD" para aparecer no topo do card.
-function getPageName(pathname: string) {
-  const lastSegment = pathname.split("/").filter(Boolean).at(-1) ?? "dashboard";
-
-  const formattedName = lastSegment.replaceAll("-", " ").toLowerCase();
-
-  return formattedName.charAt(0).toUpperCase() + formattedName.slice(1);
-}
 
 // Pega apenas o primeiro nome do usuario.
 // Exemplo: "Jhonatan Silva" vira "Jhonatan".
@@ -31,11 +21,18 @@ const headerButtonClass =
 // O valor e curto para parecer rapido, mas ainda suave.
 const MENU_ANIMATION_MS = 180;
 
+interface DashboardHeaderProps {
+  currentPage: DashboardPageKey;
+  onPageChange: (page: DashboardPageKey) => void;
+}
+
 // Header principal da pagina logada.
 // Ele replica o card da imagem: botao de menu, nome da pagina, saudacao e botao de tema.
 // O header fica fixo para continuar visivel mesmo quando a pagina tiver scroll.
-export function DashboardHeader() {
-  const pathname = usePathname();
+export function DashboardHeader({
+  currentPage,
+  onPageChange,
+}: DashboardHeaderProps) {
   const closeTimerRef = useRef<number | null>(null);
   const [isMenuMounted, setIsMenuMounted] = useState(false);
   const [isMenuVisible, setIsMenuVisible] = useState(false);
@@ -56,30 +53,8 @@ export function DashboardHeader() {
     () => "",
   );
 
-  // Nome da pagina atual usado tanto no header quanto no item ativo do menu.
-  const pageName = getPageName(pathname);
-
   // Transforma o nome completo salvo em saudacao curta.
   const firstName = getFirstName(currentUserName);
-
-  // Trava o scroll da pagina enquanto o menu esta aberto.
-  // Isso impede que o modal crie scroll indesejado no mobile.
-  useEffect(() => {
-    if (!isMenuMounted) {
-      return;
-    }
-
-    const previousBodyOverflow = document.body.style.overflow;
-    const previousHtmlOverflow = document.documentElement.style.overflow;
-
-    document.body.style.overflow = "hidden";
-    document.documentElement.style.overflow = "hidden";
-
-    return () => {
-      document.body.style.overflow = previousBodyOverflow;
-      document.documentElement.style.overflow = previousHtmlOverflow;
-    };
-  }, [isMenuMounted]);
 
   // Abre o menu ja no estado visivel.
   // Assim evitamos um flash visual em que ele monta fechado e logo depois abre.
@@ -102,6 +77,13 @@ export function DashboardHeader() {
     }, MENU_ANIMATION_MS);
   }
 
+  // Troca o componente renderizado abaixo do header sem trocar de rota.
+  // Depois fecha o menu com animacao para manter o fluxo visual limpo.
+  function handlePageChange(page: DashboardPageKey) {
+    onPageChange(page);
+    closeMenu();
+  }
+
   return (
     <>
       <header className="fixed left-4 right-4 top-4 z-50 overflow-hidden rounded-[28px] bg-white/78 px-4 py-4 shadow-[0_0_0_1px_rgba(255,255,255,0.95),0_18px_55px_rgba(45,35,24,0.12)] backdrop-blur-2xl sm:left-8 sm:right-8 sm:top-6 sm:px-5">
@@ -122,7 +104,7 @@ export function DashboardHeader() {
 
             <div className="min-w-0">
               <p className="text-[0.65rem] font-bold uppercase tracking-[0.38em] text-slate-500">
-                {pageName}
+                {currentPage}
               </p>
               <h1 className="mt-1 truncate text-xl font-semibold text-slate-950 sm:text-lg">
                 Olá, {firstName}
@@ -149,7 +131,8 @@ export function DashboardHeader() {
       {isMenuMounted ? (
         <DashboardMenu
           isOpen={isMenuVisible}
-          pageName={pageName}
+          currentPage={currentPage}
+          onPageChange={handlePageChange}
           userName={currentUserName || "Usuário"}
           userEmail={currentUserEmail || "email não informado"}
           onClose={closeMenu}

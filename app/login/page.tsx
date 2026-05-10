@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AuthButton } from "@/components/auth/AuthButton";
 import { AuthCard } from "@/components/auth/AuthCard";
@@ -10,7 +10,12 @@ import { FormMessage } from "@/components/auth/FormMessage";
 import { InputField } from "@/components/auth/InputField";
 import { PasswordInput } from "@/components/auth/PasswordInput";
 import { UserIcon } from "@/components/auth/icons";
-import { findAuthenticatedUser, saveCurrentUser } from "@/lib/storage";
+import { createAuthSession } from "@/lib/session";
+import {
+  findAuthenticatedUser,
+  getCurrentUser,
+  saveCurrentUser,
+} from "@/lib/storage";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -21,6 +26,19 @@ export default function LoginPage() {
     identifier: "",
     password: "",
   });
+
+  // Se ja existe usuario salvo no navegador, recria o cookie de sessao e entra no dashboard.
+  // Isso evita que a pessoa logada volte para a tela de login ao abrir o mesmo link de novo.
+  useEffect(() => {
+    const currentUser = getCurrentUser();
+
+    if (!currentUser) {
+      return;
+    }
+
+    createAuthSession(currentUser);
+    router.replace("/dashboard");
+  }, [router]);
 
   //Altera o State com a mensagem do erro, ou seja, se a validação não passar, uma das mensagens é emitida
 
@@ -52,6 +70,9 @@ export default function LoginPage() {
 
     // Salva quem entrou para que a proxima pagina consiga mostrar "Ola, Nome".
     saveCurrentUser(authenticatedUser);
+
+    // Cria um cookie persistente para o Proxy liberar as rotas internas do site.
+    createAuthSession(authenticatedUser);
 
     router.push("/dashboard");
   }

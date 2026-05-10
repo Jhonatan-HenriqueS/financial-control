@@ -85,3 +85,37 @@ input {
 .animate-dashboard-menu-exit {
   animation: dashboard-menu-exit 180ms ease-in forwards;
 }
+
+/* Modal abrindo: aparece de baixo para cima. */
+@keyframes category-modal-enter {
+  from {
+    opacity: 0;
+    transform: translateY(34px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Modal fechando: desce de cima para baixo ate sair da tela. */
+@keyframes category-modal-exit {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(34px) scale(0.98);
+  }
+}
+
+/* Classe usada quando o modal entra na tela. */
+.animate-category-modal-enter {
+  animation: category-modal-enter 180ms ease-out forwards;
+}
+
+/* Classe usada quando o modal sai da tela. */
+.animate-category-modal-exit {
+  animation: category-modal-exit 180ms ease-in forwards;
+}
