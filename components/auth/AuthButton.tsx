@@ -15,7 +15,7 @@ export function AuthButton({
 }: AuthButtonProps) {
   return (
     <button
-      className={`h-[50px] w-full rounded-2xl bg-[linear-gradient(135deg,#ff5f00_0%,#ff8a00_45%,#ffbd17_100%)] text-white shadow-[0_18px_28px_rgba(255,111,0,0.24)] transition hover:brightness-105 focus:outline-none focus:ring-4 focus:ring-[#ff8a00]/30 disabled:cursor-not-allowed disabled:opacity-70 sm:h-[64px] sm:rounded-[19px] ${className} `}
+      className={`h-[50px] w-full rounded-2xl bg-[linear-gradient(135deg,#ff5f00_0%,#ff8a00_45%,#ffbd17_100%)] text-white shadow-[0_18px_28px_rgba(255,111,0,0.24)] transition hover:brightness-105 focus:outline-none focus:shadow-[0_0_0_5px_rgba(255,138,0,0.18),0_18px_28px_rgba(255,111,0,0.24)] disabled:cursor-not-allowed disabled:opacity-70 sm:h-[64px] sm:rounded-[19px] ${className} `}
       {...props}
     >
       {/* Span interno controla o tamanho e peso do texto sem afetar o tamanho do botao. */}

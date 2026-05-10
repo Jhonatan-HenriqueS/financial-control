@@ -30,10 +30,10 @@ export function InputField({
         {label}
       </label>
       <div
-        className={`flex h-[60px] items-center rounded-2xl bg-white/86 px-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.95),0_16px_34px_rgba(47,38,26,0.07)] ring-1 transition focus-within:ring-2 sm:h-[68px] sm:rounded-[22px] ${
+        className={`flex h-[60px] items-center rounded-2xl bg-white/86 px-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.95),0_16px_34px_rgba(47,38,26,0.07)] transition sm:h-[68px] sm:rounded-[22px] ${
           error
-            ? "ring-red-400/70 focus-within:ring-red-500/70"
-            : "ring-black/[0.02] focus-within:ring-[#ff7a00]/50"
+            ? "ring-1 ring-red-400/70 focus-within:ring-2 focus-within:ring-red-500/70"
+            : "focus-within:shadow-[inset_0_1px_0_rgba(255,255,255,0.95),0_0_0_5px_rgba(255,122,0,0.14),0_18px_38px_rgba(255,112,0,0.14)]"
         }`}
       >
         {/* O icone fica sempre a esquerda para indicar o tipo de informacao esperada. */}

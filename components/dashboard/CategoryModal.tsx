@@ -64,7 +64,7 @@ export function CategoryModal({
               type="button"
               aria-label="Fechar modal"
               onClick={onClose}
-              className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl text-slate-950 transition hover:bg-white/55 focus:outline-none focus:ring-4 focus:ring-[#ff9a2a]/15"
+              className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl text-slate-950 transition hover:bg-white/55 focus:outline-none focus:shadow-[0_0_0_5px_rgba(255,154,42,0.15)]"
             >
               <X size={20} strokeWidth={2.1} />
             </button>
@@ -89,7 +89,7 @@ export function CategoryModal({
                 value={categoryName}
                 onChange={(event) => setCategoryName(event.target.value)}
                 placeholder="Ex: Alimentação, Lazer..."
-                className="h-14 w-full rounded-2xl mt-3 bg-white/78 px-5 text-base font-medium text-slate-950 outline-none ring-1 ring-[#ffb35c]/24 transition-all duration-200 placeholder:text-slate-400 focus:shadow-[0_0_0_4px_rgba(255,154,42,0.16),0_14px_32px_rgba(255,112,0,0.18)] focus:ring-2 focus:ring-[#ff9a2a]/45"
+                className="mt-3 h-14 w-full rounded-2xl bg-white/78 px-5 text-base font-medium text-slate-950 shadow-[0_10px_26px_rgba(255,136,0,0.08)] outline-none transition-all duration-200 placeholder:text-slate-400 focus:shadow-[0_0_0_5px_rgba(255,154,42,0.18),0_14px_34px_rgba(255,112,0,0.2)]"
               />
               {errorMessage ? (
                 <p className="text-sm font-semibold text-red-600">
@@ -100,7 +100,7 @@ export function CategoryModal({
 
             <button
               type="submit"
-              className="h-14 w-full rounded-2xl bg-[linear-gradient(135deg,#ff6500,#ffb51b)] text-base font-bold text-white shadow-[0_14px_32px_rgba(255,112,0,0.24)] transition hover:brightness-105 focus:outline-none focus:ring-4 focus:ring-[#ff9a2a]/20"
+              className="h-14 w-full rounded-2xl bg-[linear-gradient(135deg,#ff6500,#ffb51b)] text-base font-bold text-white shadow-[0_14px_32px_rgba(255,112,0,0.24)] transition hover:brightness-105 focus:outline-none focus:shadow-[0_0_0_5px_rgba(255,154,42,0.18),0_14px_32px_rgba(255,112,0,0.24)]"
             >
               {category ? "Salvar categoria" : "Criar categoria"}
             </button>

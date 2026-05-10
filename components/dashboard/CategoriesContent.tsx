@@ -92,7 +92,7 @@ export function CategoriesContent() {
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-col gap-6">
       {/* Card de introducao da pagina, com sombra para destacar o titulo e a acao principal. */}
-      <div className="rounded-[30px] bg-white p-5 shadow-[0_0_0_1px_rgba(255,179,92,0.16),0_22px_65px_rgba(45,35,24,0.1)] sm:p-6">
+      <div className="rounded-[30px] bg-white p-5 shadow-[0_18px_54px_rgba(255,136,0,0.12),0_22px_65px_rgba(45,35,24,0.08)] sm:p-6">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="mt-2 text-2xl font-bold text-slate-950">
@@ -107,7 +107,7 @@ export function CategoriesContent() {
           <button
             type="button"
             onClick={openCreateModal}
-            className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl bg-[linear-gradient(135deg,#ff6500,#ffb51b)] px-5 text-sm font-bold text-white shadow-[0_14px_32px_rgba(255,112,0,0.24)] transition hover:brightness-105 focus:outline-none focus:ring-4 focus:ring-[#ff9a2a]/20"
+            className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl bg-[linear-gradient(135deg,#ff6500,#ffb51b)] px-5 text-sm font-bold text-white shadow-[0_14px_32px_rgba(255,112,0,0.24)] transition hover:brightness-105 focus:outline-none focus:shadow-[0_0_0_5px_rgba(255,154,42,0.18),0_14px_32px_rgba(255,112,0,0.24)]"
           >
             Criar categoria
             <Plus size={18} strokeWidth={2.2} />
@@ -115,13 +115,13 @@ export function CategoriesContent() {
         </div>
       </div>
 
-      <section className="rounded-[28px] bg-white p-4 shadow-[0_0_0_1px_rgba(255,179,92,0.2),0_18px_55px_rgba(45,35,24,0.08)] sm:p-5">
+      <section className="rounded-[28px] bg-white p-4 shadow-[0_16px_50px_rgba(255,136,0,0.1),0_18px_55px_rgba(45,35,24,0.07)] sm:p-5">
         {categories.length > 0 ? (
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {categories.map((category) => (
               <article
                 key={category.id}
-                className="flex items-center justify-between gap-3 rounded-2xl bg-orange-50/45 p-3 shadow-[inset_0_0_0_1px_rgba(255,179,92,0.18),0_10px_24px_rgba(15,23,42,0.06)]"
+                className="flex items-center justify-between gap-3 rounded-2xl bg-orange-50/45 p-3 shadow-[0_10px_26px_rgba(255,136,0,0.1),0_10px_24px_rgba(15,23,42,0.05)]"
               >
                 <div className="flex min-w-0 items-center gap-3">
                   {/* A cor unica da categoria aparece como circulo ao lado do nome. */}
@@ -130,7 +130,7 @@ export function CategoriesContent() {
                     style={{ backgroundColor: category.color }}
                     aria-hidden="true"
                   />
-                  <p className="min-w-0 truncate tegixt-sm font-semibold text-slate-950">
+                  <p className="min-w-0 truncate text-sm font-semibold text-slate-950">
                     {category.name}
                   </p>
                 </div>

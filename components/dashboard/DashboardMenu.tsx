@@ -92,7 +92,7 @@ export function DashboardMenu({
               type="button"
               aria-label="Fechar menu"
               onClick={onClose}
-              className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl text-slate-950 transition hover:bg-white/45 focus:outline-none focus:ring-4 focus:ring-[#ff9a2a]/15"
+              className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl text-slate-950 transition hover:bg-white/45 focus:outline-none focus:shadow-[0_0_0_5px_rgba(255,154,42,0.15)]"
             >
               <X size={18} strokeWidth={2.1} />
             </button>
@@ -108,9 +108,9 @@ export function DashboardMenu({
                   key={item.label}
                   type="button"
                   onClick={() => onPageChange(item.label)}
-                  className={`flex w-full items-center gap-3 rounded-[24px] px-4 py-3 text-left transition focus:outline-none focus:ring-4 focus:ring-[#ff9a2a]/15 ${
+                  className={`flex w-full items-center gap-3 rounded-[24px] px-4 py-3 text-left transition focus:outline-none focus:shadow-[0_0_0_5px_rgba(255,154,42,0.15)] ${
                     isActive
-                      ? "bg-[linear-gradient(135deg,rgba(255,150,36,0.26),rgba(255,183,64,0.18))] text-slate-950 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.42),0_12px_26px_rgba(255,135,0,0.12)]"
+                      ? "bg-[linear-gradient(135deg,rgba(255,150,36,0.26),rgba(255,183,64,0.18))] text-slate-950 shadow-[0_12px_28px_rgba(255,135,0,0.16)]"
                       : "text-slate-500 hover:bg-white/42 hover:text-slate-950"
                   }`}
                 >
@@ -129,7 +129,7 @@ export function DashboardMenu({
             })}
           </nav>
 
-          <div className="rounded-[26px] bg-white/55 p-3 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.62),0_14px_38px_rgba(15,23,42,0.12)]">
+          <div className="rounded-[26px] bg-white/55 p-3 shadow-[0_14px_38px_rgba(255,136,0,0.1),0_14px_38px_rgba(15,23,42,0.09)]">
             <div className="flex items-center gap-3">
               <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-[linear-gradient(135deg,#ff6500,#ffb51b)] text-sm font-bold uppercase tracking-[0.12em] text-white">
                 {getUserInitials(userName)}
@@ -147,7 +147,7 @@ export function DashboardMenu({
             {/* Botao de configuracoes. Ele ainda nao abre uma tela; apenas representa a acao. */}
             <button
               type="button"
-              className="mt-4 flex h-11 w-full items-center justify-center gap-2 rounded-2xl border border-[#ffb35c]/30 bg-white/45 text-sm font-semibold text-slate-950 transition hover:bg-white/65 focus:outline-none focus:ring-4 focus:ring-[#ff9a2a]/15"
+              className="mt-4 flex h-11 w-full items-center justify-center gap-2 rounded-2xl bg-white/45 text-sm font-semibold text-slate-950 shadow-[0_10px_24px_rgba(255,136,0,0.1)] transition hover:bg-white/65 hover:shadow-[0_12px_28px_rgba(255,136,0,0.16)] focus:outline-none focus:shadow-[0_0_0_5px_rgba(255,154,42,0.15),0_10px_24px_rgba(255,136,0,0.12)]"
             >
               <Settings size={16} strokeWidth={2.1} />
               Configurações
