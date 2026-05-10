@@ -1,6 +1,7 @@
 "use client";
 
 import { Folder, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import type { ExpenseCategory } from "@/types/category";
 
 interface ExpenseCategoryModalProps {
@@ -49,14 +50,15 @@ export function ExpenseCategoryModal({
               </h3>
             </div>
 
-            <button
+            <Button
               type="button"
               aria-label="Fechar categorias"
               onClick={onClose}
-              className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl text-slate-950 transition hover:bg-white/55 focus:outline-none focus:shadow-[0_0_0_5px_rgba(255,154,42,0.15)]"
+              variant="ghost"
+              className="h-10 w-10 rounded-2xl text-slate-950 hover:bg-white/55 focus-visible:ring-0 focus-visible:shadow-[0_0_0_5px_rgba(255,154,42,0.15)]"
             >
               <X size={18} strokeWidth={2.1} />
-            </button>
+            </Button>
           </div>
 
           {categories.length > 0 ? (
@@ -65,11 +67,12 @@ export function ExpenseCategoryModal({
                 const isSelected = category.id === selectedCategoryId;
 
                 return (
-                  <button
+                  <Button
                     key={category.id}
                     type="button"
                     onClick={() => onSelectCategory(category)}
-                    className={`flex items-center gap-3 rounded-2xl bg-white/62 p-3 text-left transition hover:bg-white/82 focus:outline-none focus:shadow-[0_0_0_5px_rgba(255,154,42,0.15)] ${
+                    variant="ghost"
+                    className={`h-auto justify-start gap-3 rounded-2xl bg-white/62 p-3 text-left hover:bg-white/82 focus-visible:ring-0 focus-visible:shadow-[0_0_0_5px_rgba(255,154,42,0.15)] ${
                       isSelected
                         ? "shadow-[0_12px_30px_rgba(255,136,0,0.18)]"
                         : "shadow-[0_10px_24px_rgba(15,23,42,0.06)]"
@@ -83,7 +86,7 @@ export function ExpenseCategoryModal({
                     <span className="min-w-0 flex-1 truncate text-sm font-bold text-slate-950">
                       {category.name}
                     </span>
-                  </button>
+                  </Button>
                 );
               })}
             </div>

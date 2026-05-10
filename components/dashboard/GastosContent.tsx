@@ -1,8 +1,10 @@
 "use client";
 
-import { Plus, Trash2 } from "lucide-react";
+import { Plus } from "lucide-react";
 import { useRef, useState, useSyncExternalStore } from "react";
+import { ExpenseActionsPopover } from "@/components/dashboard/ExpenseActionsPopover";
 import { ExpenseModal } from "@/components/dashboard/ExpenseModal";
+import { Button } from "@/components/ui/button";
 import {
   deleteExpense,
   getExpenses,
@@ -90,14 +92,15 @@ export function GastosContent() {
             </p>
           </div>
 
-          <button
+          <Button
             type="button"
             onClick={openCreateExpenseModal}
-            className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl bg-[linear-gradient(135deg,#ff6500,#ffb51b)] px-5 text-sm font-bold text-white shadow-[0_14px_32px_rgba(255,112,0,0.24)] transition hover:brightness-105 focus:outline-none focus:shadow-[0_0_0_5px_rgba(255,154,42,0.18),0_14px_32px_rgba(255,112,0,0.24)]"
+            variant="sun"
+            size="cta"
           >
             Criar gasto
             <Plus size={18} strokeWidth={2.2} />
-          </button>
+          </Button>
         </div>
       </section>
 
@@ -131,14 +134,10 @@ export function GastosContent() {
                   <p className="text-sm font-extrabold text-slate-950">
                     {formatCurrency(expense.amountCents)}
                   </p>
-                  <button
-                    type="button"
-                    aria-label={`Excluir gasto ${expense.name}`}
-                    onClick={() => deleteExpense(expense.id)}
-                    className="grid h-9 w-9 place-items-center rounded-xl bg-white/58 text-red-600 transition hover:bg-white/78 focus:outline-none focus:shadow-[0_0_0_5px_rgba(239,68,68,0.14)]"
-                  >
-                    <Trash2 size={16} strokeWidth={2.1} />
-                  </button>
+                  <ExpenseActionsPopover
+                    expense={expense}
+                    onDelete={deleteExpense}
+                  />
                 </div>
               </article>
             ))}

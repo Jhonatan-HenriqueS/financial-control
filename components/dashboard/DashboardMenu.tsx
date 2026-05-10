@@ -2,6 +2,7 @@
 
 import { Folder, LayoutDashboard, Settings, WalletCards, X } from "lucide-react";
 import type { ComponentType } from "react";
+import { Button } from "@/components/ui/button";
 import type { DashboardPageKey } from "@/components/dashboard/DashboardShell";
 
 interface DashboardMenuProps {
@@ -92,14 +93,15 @@ export function DashboardMenu({
             </div>
 
             {/* Fecha o menu sem navegar para outra pagina. */}
-            <button
+            <Button
               type="button"
               aria-label="Fechar menu"
               onClick={onClose}
-              className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl text-slate-950 transition hover:bg-white/45 focus:outline-none focus:shadow-[0_0_0_5px_rgba(255,154,42,0.15)]"
+              variant="ghost"
+              className="h-10 w-10 rounded-2xl text-slate-950 hover:bg-white/45 focus-visible:ring-0 focus-visible:shadow-[0_0_0_5px_rgba(255,154,42,0.15)]"
             >
               <X size={18} strokeWidth={2.1} />
-            </button>
+            </Button>
           </div>
 
           <nav className="mt-10 flex-1 space-y-2">
@@ -108,11 +110,12 @@ export function DashboardMenu({
               const isActive = item.label === currentPage;
 
               return (
-                <button
+                <Button
                   key={item.label}
                   type="button"
                   onClick={() => onPageChange(item.label)}
-                  className={`flex w-full items-center gap-3 rounded-[24px] px-4 py-3 text-left transition focus:outline-none focus:shadow-[0_0_0_5px_rgba(255,154,42,0.15)] ${
+                  variant="ghost"
+                  className={`h-auto w-full justify-start gap-3 rounded-[24px] px-4 py-3 text-left focus-visible:ring-0 focus-visible:shadow-[0_0_0_5px_rgba(255,154,42,0.15)] ${
                     isActive
                       ? "bg-[linear-gradient(135deg,rgba(255,150,36,0.26),rgba(255,183,64,0.18))] text-slate-950 shadow-[0_12px_28px_rgba(255,135,0,0.16)]"
                       : "text-slate-500 hover:bg-white/42 hover:text-slate-950"
@@ -128,7 +131,7 @@ export function DashboardMenu({
                     <Icon size={20} strokeWidth={2.1} />
                   </span>
                   <span className="text-sm font-semibold">{item.label}</span>
-                </button>
+                </Button>
               );
             })}
           </nav>
@@ -149,13 +152,14 @@ export function DashboardMenu({
             </div>
 
             {/* Botao de configuracoes. Ele ainda nao abre uma tela; apenas representa a acao. */}
-            <button
+            <Button
               type="button"
-              className="mt-4 flex h-11 w-full items-center justify-center gap-2 rounded-2xl bg-white/45 text-sm font-semibold text-slate-950 shadow-[0_10px_24px_rgba(255,136,0,0.1)] transition hover:bg-white/65 hover:shadow-[0_12px_28px_rgba(255,136,0,0.16)] focus:outline-none focus:shadow-[0_0_0_5px_rgba(255,154,42,0.15),0_10px_24px_rgba(255,136,0,0.12)]"
+              variant="translucentAction"
+              className="mt-4 h-11 w-full gap-2 text-sm font-semibold"
             >
               <Settings size={16} strokeWidth={2.1} />
               Configurações
-            </button>
+            </Button>
           </div>
         </div>
       </aside>

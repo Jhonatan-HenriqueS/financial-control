@@ -3,6 +3,7 @@
 import { Menu, Moon, Sun } from "lucide-react";
 import { useRef, useState, useSyncExternalStore } from "react";
 import { DashboardMenu } from "@/components/dashboard/DashboardMenu";
+import { Button } from "@/components/ui/button";
 import type { DashboardPageKey } from "@/components/dashboard/DashboardShell";
 import { getCurrentUser } from "@/lib/storage";
 
@@ -11,11 +12,6 @@ import { getCurrentUser } from "@/lib/storage";
 function getFirstName(name?: string) {
   return name?.trim().split(/\s+/)[0] || "Usuário";
 }
-
-// Estilo compartilhado dos botoes do header.
-// Usa laranja bem suave para combinar com o fundo sem pesar visualmente.
-const headerButtonClass =
-  "flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,rgba(255,255,255,0.78),rgba(255,235,208,0.72))] text-[#d95f00] shadow-[0_10px_28px_rgba(255,121,0,0.16)] transition hover:bg-[linear-gradient(135deg,rgba(255,255,255,0.9),rgba(255,226,188,0.86))] hover:shadow-[0_14px_34px_rgba(255,121,0,0.22)] focus:outline-none focus:shadow-[0_0_0_5px_rgba(255,154,42,0.16),0_12px_30px_rgba(255,121,0,0.2)]";
 
 // Tempo da animacao de entrada e saida do menu.
 // O valor e curto para parecer rapido, mas ainda suave.
@@ -93,14 +89,15 @@ export function DashboardHeader({
         <div className="relative z-10 flex items-center justify-between gap-4">
           <div className="flex min-w-0 items-center gap-3 sm:gap-4">
             {/* Botao que abre o menu lateral em vidro. */}
-            <button
+            <Button
               type="button"
               aria-label="Abrir menu"
               onClick={openMenu}
-              className={headerButtonClass}
+              variant="softIcon"
+              size="appIcon"
             >
               <Menu size={20} strokeWidth={2.2} />
-            </button>
+            </Button>
 
             <div className="min-w-0">
               <p className="text-[0.65rem] font-bold uppercase tracking-[0.38em] text-slate-500">
@@ -113,18 +110,19 @@ export function DashboardHeader({
           </div>
 
           {/* Botao de tema. Ele alterna apenas o icone por enquanto. */}
-          <button
+          <Button
             type="button"
             aria-label="Alternar icone de tema"
             onClick={() => setIsDarkIcon((current) => !current)}
-            className={headerButtonClass}
+            variant="softIcon"
+            size="appIcon"
           >
             {isDarkIcon ? (
               <Moon size={18} fill="currentColor" strokeWidth={2.2} />
             ) : (
               <Sun size={20} strokeWidth={2.2} />
             )}
-          </button>
+          </Button>
         </div>
       </header>
 

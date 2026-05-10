@@ -2,6 +2,7 @@
 
 import { X } from "lucide-react";
 import { FormEvent, useState } from "react";
+import { Button } from "@/components/ui/button";
 import type { ExpenseCategory } from "@/types/category";
 
 interface CategoryModalProps {
@@ -60,14 +61,16 @@ export function CategoryModal({
               </h3>
             </div>
 
-            <button
+            <Button
               type="button"
               aria-label="Fechar modal"
               onClick={onClose}
-              className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl text-slate-950 transition hover:bg-white/55 focus:outline-none focus:shadow-[0_0_0_5px_rgba(255,154,42,0.15)]"
+              variant="ghost"
+              size="appIcon"
+              className="rounded-2xl text-slate-950 hover:bg-white/55 focus-visible:ring-0 focus-visible:shadow-[0_0_0_5px_rgba(255,154,42,0.15)]"
             >
               <X size={20} strokeWidth={2.1} />
-            </button>
+            </Button>
           </div>
 
           <p className="mt-6 text-base font-medium leading-8 text-slate-600">
@@ -98,12 +101,13 @@ export function CategoryModal({
               ) : null}
             </div>
 
-            <button
+            <Button
               type="submit"
-              className="h-14 w-full rounded-2xl bg-[linear-gradient(135deg,#ff6500,#ffb51b)] text-base font-bold text-white shadow-[0_14px_32px_rgba(255,112,0,0.24)] transition hover:brightness-105 focus:outline-none focus:shadow-[0_0_0_5px_rgba(255,154,42,0.18),0_14px_32px_rgba(255,112,0,0.24)]"
+              variant="sun"
+              size="form"
             >
               {category ? "Salvar categoria" : "Criar categoria"}
-            </button>
+            </Button>
           </form>
         </div>
       </div>

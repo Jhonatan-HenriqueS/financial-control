@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { InputHTMLAttributes } from "react";
+import { Button } from "@/components/ui/button";
 import { EyeIcon, EyeOffIcon, LockIcon } from "./icons";
 
 // Propriedades do campo de senha.
@@ -52,18 +53,19 @@ export function PasswordInput({
         />
 
         {/* Botao semantico para alternar entre mostrar e esconder a senha. */}
-        <button
+        <Button
           type="button"
           aria-label={isVisible ? "Ocultar senha" : "Mostrar senha"}
           onClick={() => setIsVisible((current) => !current)}
-          className="ml-3 rounded-full p-2 text-[#7b7f84] transition hover:bg-orange-50 hover:text-[#ff7300] focus:outline-none focus:shadow-[0_0_0_4px_rgba(255,122,0,0.14)]"
+          variant="ghost"
+          className="ml-3 h-10 w-10 rounded-full p-2 text-[#7b7f84] hover:bg-orange-50 hover:text-[#ff7300] focus-visible:ring-0 focus-visible:shadow-[0_0_0_4px_rgba(255,122,0,0.14)]"
         >
           {isVisible ? (
             <EyeOffIcon className="h-6 w-6" />
           ) : (
             <EyeIcon className="h-6 w-6" />
           )}
-        </button>
+        </Button>
       </div>
 
       {/* Erro do campo de senha, exibido logo abaixo do input. */}

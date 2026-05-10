@@ -1,8 +1,10 @@
 "use client";
 
-import { Pencil, Plus, Trash2 } from "lucide-react";
+import { Plus } from "lucide-react";
 import { useRef, useState, useSyncExternalStore } from "react";
+import { CategoryActionsPopover } from "@/components/dashboard/CategoryActionsPopover";
 import { CategoryModal } from "@/components/dashboard/CategoryModal";
+import { Button } from "@/components/ui/button";
 import {
   createCategory,
   deleteCategory,
@@ -104,14 +106,15 @@ export function CategoriesContent() {
             </p>
           </div>
 
-          <button
+          <Button
             type="button"
             onClick={openCreateModal}
-            className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl bg-[linear-gradient(135deg,#ff6500,#ffb51b)] px-5 text-sm font-bold text-white shadow-[0_14px_32px_rgba(255,112,0,0.24)] transition hover:brightness-105 focus:outline-none focus:shadow-[0_0_0_5px_rgba(255,154,42,0.18),0_14px_32px_rgba(255,112,0,0.24)]"
+            variant="sun"
+            size="cta"
           >
             Criar categoria
             <Plus size={18} strokeWidth={2.2} />
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -135,24 +138,11 @@ export function CategoriesContent() {
                   </p>
                 </div>
 
-                <div className="flex shrink-0 items-center gap-2">
-                  <button
-                    type="button"
-                    aria-label={`Editar categoria ${category.name}`}
-                    onClick={() => openEditModal(category)}
-                    className="grid h-9 w-9 place-items-center rounded-xl bg-white/58 text-slate-950 transition hover:bg-white/78 focus:outline-none focus:ring-4 focus:ring-white/45"
-                  >
-                    <Pencil size={16} strokeWidth={2.1} />
-                  </button>
-                  <button
-                    type="button"
-                    aria-label={`Excluir categoria ${category.name}`}
-                    onClick={() => deleteCategory(category.id)}
-                    className="grid h-9 w-9 place-items-center rounded-xl bg-white/58 text-red-600 transition hover:bg-white/78 focus:outline-none focus:ring-4 focus:ring-white/45"
-                  >
-                    <Trash2 size={16} strokeWidth={2.1} />
-                  </button>
-                </div>
+                <CategoryActionsPopover
+                  category={category}
+                  onEdit={openEditModal}
+                  onDelete={deleteCategory}
+                />
               </article>
             ))}
           </div>

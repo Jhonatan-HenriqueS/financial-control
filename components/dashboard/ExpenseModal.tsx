@@ -4,6 +4,7 @@ import { CalendarDays, Tags, X } from "lucide-react";
 import { FormEvent, useRef, useState } from "react";
 import { ExpenseCategoryModal } from "@/components/dashboard/ExpenseCategoryModal";
 import { ExpenseDateModal } from "@/components/dashboard/ExpenseDateModal";
+import { Button } from "@/components/ui/button";
 import { createExpense } from "@/lib/expenses";
 import type { ExpenseCategory } from "@/types/category";
 
@@ -173,14 +174,15 @@ export function ExpenseModal({ categories, isOpen, onClose }: ExpenseModalProps)
                 </h3>
               </div>
 
-              <button
+              <Button
                 type="button"
                 aria-label="Fechar gasto"
                 onClick={onClose}
-                className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl text-slate-950 transition hover:bg-white/55 focus:outline-none focus:shadow-[0_0_0_5px_rgba(255,154,42,0.15)]"
+                variant="ghost"
+                className="h-11 w-11 rounded-2xl text-slate-950 hover:bg-white/55 focus-visible:ring-0 focus-visible:shadow-[0_0_0_5px_rgba(255,154,42,0.15)]"
               >
                 <X size={19} strokeWidth={2.1} />
-              </button>
+              </Button>
             </div>
 
             <form className="mt-7 space-y-5" onSubmit={handleSubmit} noValidate>
@@ -233,29 +235,23 @@ export function ExpenseModal({ categories, isOpen, onClose }: ExpenseModalProps)
               <div className="space-y-3">
                 <p className="text-sm font-bold text-slate-950">Data</p>
                 <div className="grid gap-3 sm:grid-cols-2">
-                  <button
+                  <Button
                     type="button"
                     onClick={useCurrentDate}
-                    className={`h-12 rounded-2xl text-sm font-bold transition focus:outline-none focus:shadow-[0_0_0_5px_rgba(255,154,42,0.15)] ${
-                      dateMode === "current"
-                        ? "bg-[linear-gradient(135deg,#ff6500,#ffb51b)] text-white shadow-[0_14px_32px_rgba(255,112,0,0.22)]"
-                        : "bg-white/62 text-slate-950 shadow-[0_10px_24px_rgba(255,136,0,0.08)] hover:bg-white/82"
-                    }`}
+                    variant={dateMode === "current" ? "sun" : "translucentAction"}
+                    className="h-12 text-sm"
                   >
                     Usar data atual
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     type="button"
                     onClick={openDateModal}
-                    className={`flex h-12 items-center justify-center gap-2 rounded-2xl text-sm font-bold transition focus:outline-none focus:shadow-[0_0_0_5px_rgba(255,154,42,0.15)] ${
-                      dateMode === "custom"
-                        ? "bg-[linear-gradient(135deg,#ff6500,#ffb51b)] text-white shadow-[0_14px_32px_rgba(255,112,0,0.22)]"
-                        : "bg-white/62 text-slate-950 shadow-[0_10px_24px_rgba(255,136,0,0.08)] hover:bg-white/82"
-                    }`}
+                    variant={dateMode === "custom" ? "sun" : "translucentAction"}
+                    className="h-12 gap-2 text-sm"
                   >
                     <CalendarDays size={17} strokeWidth={2.1} />
                     Personalizar
-                  </button>
+                  </Button>
                 </div>
                 <p className="text-xs font-semibold text-slate-500">
                   Data selecionada: {formatDateLabel(selectedDateKey)}
@@ -264,10 +260,11 @@ export function ExpenseModal({ categories, isOpen, onClose }: ExpenseModalProps)
 
               <div className="space-y-3">
                 <p className="text-sm font-bold text-slate-950">Categoria</p>
-                <button
+                <Button
                   type="button"
                   onClick={openCategoryModal}
-                  className="flex h-13 w-full items-center justify-between gap-3 rounded-2xl bg-white/68 px-4 text-left shadow-[0_10px_26px_rgba(255,136,0,0.08)] transition hover:bg-white/86 focus:outline-none focus:shadow-[0_0_0_5px_rgba(255,154,42,0.15),0_10px_26px_rgba(255,136,0,0.08)]"
+                  variant="translucentAction"
+                  className="h-13 w-full justify-between gap-3 bg-white/68 px-4 text-left hover:bg-white/86"
                 >
                   <span className="flex min-w-0 items-center gap-3">
                     {selectedCategory ? (
@@ -290,19 +287,20 @@ export function ExpenseModal({ categories, isOpen, onClose }: ExpenseModalProps)
                   <span className="text-xs font-bold text-[#ff7300]">
                     Alterar
                   </span>
-                </button>
+                </Button>
               </div>
 
               {message ? (
                 <p className="text-sm font-semibold text-red-600">{message}</p>
               ) : null}
 
-              <button
+              <Button
                 type="submit"
-                className="h-14 w-full rounded-2xl bg-[linear-gradient(135deg,#ff6500,#ffb51b)] text-base font-bold text-white shadow-[0_14px_32px_rgba(255,112,0,0.24)] transition hover:brightness-105 focus:outline-none focus:shadow-[0_0_0_5px_rgba(255,154,42,0.18),0_14px_32px_rgba(255,112,0,0.24)]"
+                variant="sun"
+                size="form"
               >
                 Salvar gasto
-              </button>
+              </Button>
             </form>
           </div>
         </div>
