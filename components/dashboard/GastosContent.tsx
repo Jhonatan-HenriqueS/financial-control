@@ -7,6 +7,7 @@ import { ExpenseCategoryFilter } from "@/components/dashboard/ExpenseCategoryFil
 import { ExpenseModal } from "@/components/dashboard/ExpenseModal";
 import { ExpenseSummaryCard } from "@/components/dashboard/ExpenseSummaryCard";
 import { Button } from "@/components/ui/button";
+import { formatCurrency } from "@/lib/currency";
 import {
   deleteExpense,
   getExpenses,
@@ -27,14 +28,6 @@ const EXPENSE_MODAL_ANIMATION_MS = 180;
 // Snapshot usado enquanto o servidor renderiza.
 const getServerExpensesSnapshot = () => EMPTY_EXPENSES;
 const getServerCategoriesSnapshot = () => EMPTY_CATEGORIES;
-
-// Mostra o valor salvo em centavos como moeda brasileira.
-function formatCurrency(amountCents: number) {
-  return new Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  }).format(amountCents / 100);
-}
 
 // Mostra a data salva como yyyy-mm-dd no formato brasileiro dd/mm/aaaa.
 function formatDateLabel(dateKey: string) {

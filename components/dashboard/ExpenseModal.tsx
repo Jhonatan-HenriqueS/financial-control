@@ -5,6 +5,7 @@ import { FormEvent, useRef, useState } from "react";
 import { ExpenseCategoryModal } from "@/components/dashboard/ExpenseCategoryModal";
 import { ExpenseDateModal } from "@/components/dashboard/ExpenseDateModal";
 import { Button } from "@/components/ui/button";
+import { parseCurrencyToCents } from "@/lib/currency";
 import { createExpense } from "@/lib/expenses";
 import type { ExpenseCategory } from "@/types/category";
 
@@ -33,22 +34,6 @@ function formatDateLabel(dateKey: string) {
   const [year, month, day] = dateKey.split("-");
 
   return `${day}/${month}/${year}`;
-}
-
-// Converte o texto digitado em centavos.
-// Exemplo: "100", "R$100" ou "100,50" viram número seguro para salvar.
-function parseCurrencyToCents(value: string) {
-  const normalizedValue = value
-    .replace(/[^\d,.-]/g, "")
-    .replace(/\./g, "")
-    .replace(",", ".");
-  const amount = Number(normalizedValue);
-
-  if (!Number.isFinite(amount)) {
-    return 0;
-  }
-
-  return Math.round(amount * 100);
 }
 
 // Modal principal de criação de gasto.

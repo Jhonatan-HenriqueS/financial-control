@@ -1,17 +1,15 @@
 import { Wallet } from "lucide-react";
+import type { ReactNode } from "react";
+import { formatCurrency } from "@/lib/currency";
 
 interface ExpenseSummaryCardProps {
   totalAmountCents: number;
   selectedCategoryName?: string;
-}
-
-// Mostra centavos como moeda brasileira.
-// O armazenamento usa centavos para evitar erro de arredondamento com dinheiro.
-function formatCurrency(amountCents: number) {
-  return new Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  }).format(amountCents / 100);
+  title?: string;
+  subtitle?: string;
+  actionLabel?: string;
+  actionSlot?: ReactNode;
+  isAmountNegative?: boolean;
 }
 
 // Card de resumo dos gastos.
@@ -20,8 +18,14 @@ function formatCurrency(amountCents: number) {
 export function ExpenseSummaryCard({
   totalAmountCents,
   selectedCategoryName,
+  title,
+  subtitle,
+  actionLabel = "Em breve...",
+  actionSlot,
+  isAmountNegative = false,
 }: ExpenseSummaryCardProps) {
   const categoryLabel = selectedCategoryName ?? "Todas";
+  const cardTitle = title ?? `Total em ${categoryLabel}`;
 
   return (
     <section className="relative overflow-hidden rounded-[30px] bg-[linear-gradient(135deg,#ff9b5c_0%,#ff8a3d_48%,#ffb447_100%)] p-6 text-white shadow-[0_18px_48px_rgba(255,132,0,0.18),0_18px_54px_rgba(45,35,24,0.08)] sm:p-8">
@@ -31,16 +35,28 @@ export function ExpenseSummaryCard({
       <div className="relative z-10 flex items-center justify-between gap-5">
         <div className="min-w-0">
           <p className="text-base font-bold text-white/90 sm:text-xl">
-            Total em {categoryLabel}
+            {cardTitle}
           </p>
 
-          <p className="mt-4 truncate text-3xl font-extrabold tracking-normal text-white sm:text-4xl lg:text-5xl">
+          <p
+            className={`mt-4 truncate text-3xl font-extrabold tracking-normal sm:text-4xl lg:text-5xl ${
+              isAmountNegative ? "text-red-600" : "text-white"
+            }`}
+          >
             {formatCurrency(totalAmountCents)}
           </p>
 
-          <div className="mt-6 inline-flex h-12 items-center rounded-2xl bg-white/38 px-6 text-sm font-bold text-[#ff6500] shadow-[0_10px_24px_rgba(255,255,255,0.14)] backdrop-blur-sm sm:text-base">
-            Em breve...
-          </div>
+          {subtitle ? (
+            <p className="mt-3 text-sm font-semibold text-white/68 sm:text-base">
+              {subtitle}
+            </p>
+          ) : null}
+
+          {actionSlot ?? (
+            <div className="mt-6 inline-flex h-12 items-center rounded-2xl bg-white/38 px-6 text-sm font-bold text-[#ff6500] shadow-[0_10px_24px_rgba(255,255,255,0.14)] backdrop-blur-sm sm:text-base">
+              {actionLabel}
+            </div>
+          )}
         </div>
 
         <div className="grid h-20 w-20 shrink-0 place-items-center rounded-[28px] text-white sm:h-28 sm:w-28">

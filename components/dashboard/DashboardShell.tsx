@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { useRouter } from "next/navigation";
 import { CategoriesContent } from "@/components/dashboard/CategoriesContent";
+import { DashboardBalanceCard } from "@/components/dashboard/DashboardBalanceCard";
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { GastosContent } from "@/components/dashboard/GastosContent";
 import { clearAuthSession, hasAuthSession } from "@/lib/session";
@@ -13,7 +14,11 @@ export type DashboardPageKey = "Dashboard" | "Categorias" | "Gastos";
 
 // Conteudo renderizado quando o usuario escolhe Dashboard no menu.
 function DashboardContent() {
-  return null;
+  return (
+    <div className="mx-auto flex w-full max-w-5xl flex-col gap-6">
+      <DashboardBalanceCard />
+    </div>
+  );
 }
 
 // Conteudo renderizado quando o usuario escolhe Categorias no menu.
