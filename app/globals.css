@@ -152,6 +152,16 @@ input {
   animation: category-modal-exit 180ms ease-in forwards;
 }
 
+/* Esconde a barra visual do scroll sem bloquear a rolagem. */
+.scrollbar-invisible {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scrollbar-invisible::-webkit-scrollbar {
+  display: none;
+}
+
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);

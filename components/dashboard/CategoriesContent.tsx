@@ -4,7 +4,6 @@ import { Plus } from "lucide-react";
 import { useRef, useState, useSyncExternalStore } from "react";
 import { CategoryActionsPopover } from "@/components/dashboard/CategoryActionsPopover";
 import { CategoryModal } from "@/components/dashboard/CategoryModal";
-import { Button } from "@/components/ui/button";
 import {
   createCategory,
   deleteCategory,
@@ -106,15 +105,14 @@ export function CategoriesContent() {
             </p>
           </div>
 
-          <Button
+          <button
             type="button"
             onClick={openCreateModal}
-            variant="sun"
-            size="cta"
+            className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl bg-[linear-gradient(135deg,#ff6500,#ffb51b)] px-5 text-sm font-bold text-white shadow-[0_14px_32px_rgba(255,112,0,0.24)] transition hover:brightness-105 focus:outline-none focus:shadow-[0_0_0_5px_rgba(255,154,42,0.18),0_14px_32px_rgba(255,112,0,0.24)]"
           >
             Criar categoria
             <Plus size={18} strokeWidth={2.2} />
-          </Button>
+          </button>
         </div>
       </div>
 

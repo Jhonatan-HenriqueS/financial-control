@@ -3,6 +3,7 @@
 import { Plus } from "lucide-react";
 import { useRef, useState, useSyncExternalStore } from "react";
 import { ExpenseActionsPopover } from "@/components/dashboard/ExpenseActionsPopover";
+import { ExpenseCategoryFilter } from "@/components/dashboard/ExpenseCategoryFilter";
 import { ExpenseModal } from "@/components/dashboard/ExpenseModal";
 import { Button } from "@/components/ui/button";
 import {
@@ -57,6 +58,15 @@ export function GastosContent() {
   const closeTimerRef = useRef<number | null>(null);
   const [isModalMounted, setIsModalMounted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
+    null,
+  );
+  const selectedCategory = categories.find(
+    (category) => category.id === selectedCategoryId,
+  );
+  const filteredExpenses = selectedCategory
+    ? expenses.filter((expense) => expense.categoryId === selectedCategory.id)
+    : expenses;
 
   // Abre o modal de criação já no estado visível.
   // Isso evita um pequeno flash antes da animação começar.
@@ -105,9 +115,24 @@ export function GastosContent() {
       </section>
 
       <section className="rounded-[28px] bg-white p-4 shadow-[0_16px_50px_rgba(255,136,0,0.1),0_18px_55px_rgba(45,35,24,0.07)] sm:p-5">
-        {expenses.length > 0 ? (
+        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-sm font-bold text-slate-950">
+            {selectedCategory
+              ? `Gastos em ${selectedCategory.name}`
+              : "Todos os gastos"}
+          </p>
+
+          <ExpenseCategoryFilter
+            categories={categories}
+            expenses={expenses}
+            selectedCategoryId={selectedCategoryId}
+            onSelectCategory={setSelectedCategoryId}
+          />
+        </div>
+
+        {filteredExpenses.length > 0 ? (
           <div className="grid gap-3">
-            {expenses.map((expense) => (
+            {filteredExpenses.map((expense) => (
               <article
                 key={expense.id}
                 className="flex flex-col gap-4 rounded-2xl bg-orange-50/45 p-4 shadow-[0_10px_26px_rgba(255,136,0,0.1),0_10px_24px_rgba(15,23,42,0.05)] sm:flex-row sm:items-center sm:justify-between"
@@ -145,10 +170,14 @@ export function GastosContent() {
         ) : (
           <div className="flex min-h-44 flex-col items-center justify-center rounded-3xl bg-orange-50/70 px-4 text-center">
             <p className="text-sm font-bold text-slate-950">
-              Nenhum gasto criado ainda.
+              {selectedCategory
+                ? `Nenhum gasto em ${selectedCategory.name}.`
+                : "Nenhum gasto criado ainda."}
             </p>
             <p className="mt-2 max-w-md text-sm font-medium leading-6 text-slate-500">
-              Clique em “Criar gasto” para registrar sua primeira despesa.
+              {selectedCategory
+                ? "Escolha outra categoria ou registre um gasto para este setor."
+                : "Clique em “Criar gasto” para registrar sua primeira despesa."}
             </p>
           </div>
         )}

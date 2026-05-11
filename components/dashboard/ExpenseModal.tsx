@@ -53,7 +53,11 @@ function parseCurrencyToCents(value: string) {
 
 // Modal principal de criação de gasto.
 // Ele recebe nome, valor, data e categoria antes de salvar no localStorage.
-export function ExpenseModal({ categories, isOpen, onClose }: ExpenseModalProps) {
+export function ExpenseModal({
+  categories,
+  isOpen,
+  onClose,
+}: ExpenseModalProps) {
   const dateCloseTimerRef = useRef<number | null>(null);
   const categoryCloseTimerRef = useRef<number | null>(null);
   const [expenseName, setExpenseName] = useState("");
@@ -130,7 +134,8 @@ export function ExpenseModal({ categories, isOpen, onClose }: ExpenseModalProps)
     const result = createExpense({
       name: expenseName,
       amountCents: parseCurrencyToCents(amount),
-      date: dateMode === "current" ? formatDateKey(new Date()) : selectedDateKey,
+      date:
+        dateMode === "current" ? formatDateKey(new Date()) : selectedDateKey,
       categoryId: selectedCategory?.id ?? "",
       categoryName: selectedCategory?.name ?? "",
       categoryColor: selectedCategory?.color ?? "",
@@ -214,9 +219,7 @@ export function ExpenseModal({ categories, isOpen, onClose }: ExpenseModalProps)
                   Valor
                 </label>
                 <div className="flex h-13 items-center rounded-2xl bg-white/78 px-5 shadow-[0_10px_26px_rgba(255,136,0,0.08)] transition-all duration-200 focus-within:shadow-[0_0_0_5px_rgba(255,154,42,0.18),0_14px_34px_rgba(255,112,0,0.2)]">
-                  <span className="mr-2 text-sm font-bold text-[#ff7300]">
-                    R$
-                  </span>
+                  <span className="mr-2 text-sm font-bold ">R$</span>
                   <input
                     id="expense-amount"
                     type="text"
@@ -238,7 +241,9 @@ export function ExpenseModal({ categories, isOpen, onClose }: ExpenseModalProps)
                   <Button
                     type="button"
                     onClick={useCurrentDate}
-                    variant={dateMode === "current" ? "sun" : "translucentAction"}
+                    variant={
+                      dateMode === "current" ? "sun" : "translucentAction"
+                    }
                     className="h-12 text-sm"
                   >
                     Usar data atual
@@ -246,7 +251,9 @@ export function ExpenseModal({ categories, isOpen, onClose }: ExpenseModalProps)
                   <Button
                     type="button"
                     onClick={openDateModal}
-                    variant={dateMode === "custom" ? "sun" : "translucentAction"}
+                    variant={
+                      dateMode === "custom" ? "sun" : "translucentAction"
+                    }
                     className="h-12 gap-2 text-sm"
                   >
                     <CalendarDays size={17} strokeWidth={2.1} />
@@ -294,11 +301,7 @@ export function ExpenseModal({ categories, isOpen, onClose }: ExpenseModalProps)
                 <p className="text-sm font-semibold text-red-600">{message}</p>
               ) : null}
 
-              <Button
-                type="submit"
-                variant="sun"
-                size="form"
-              >
+              <Button type="submit" variant="sun" size="form">
                 Salvar gasto
               </Button>
             </form>

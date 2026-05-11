@@ -21,6 +21,8 @@ export function ExpenseCategoryModal({
   onClose,
   onSelectCategory,
 }: ExpenseCategoryModalProps) {
+  const shouldLimitCategoryList = categories.length > 7;
+
   return (
     <div
       onClick={onClose}
@@ -62,7 +64,11 @@ export function ExpenseCategoryModal({
           </div>
 
           {categories.length > 0 ? (
-            <div className="mt-6 grid max-h-[54dvh] gap-3 overflow-auto pr-1">
+            <div
+              className={`scrollbar-invisible mt-6 grid gap-3 overflow-y-auto pr-1 ${
+                shouldLimitCategoryList ? "max-h-[448px]" : "max-h-none"
+              }`}
+            >
               {categories.map((category) => {
                 const isSelected = category.id === selectedCategoryId;
 
