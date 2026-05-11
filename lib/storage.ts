@@ -7,6 +7,14 @@ const USERS_STORAGE_KEY = "financas:users";
 // A nova pagina usa esse dado para mostrar "Ola, Nome".
 const CURRENT_USER_STORAGE_KEY = "financas:current-user";
 
+// Evento interno para avisar quando o usuario atual mudar.
+const CURRENT_USER_CHANGED_EVENT = "financas:current-user-changed";
+
+// Cache do usuario atual.
+// Isso evita que o React receba um objeto novo a cada leitura do localStorage.
+let cachedCurrentUserRaw: string | null = null;
+let cachedCurrentUserSnapshot: User | null = null;
+
 // Padroniza textos para comparacao.
 // Exemplo: "JOAO@email.com" e "joao@email.com" passam a ser tratados como iguais.
 const normalize = (value: string) => value.trim().toLowerCase();
@@ -113,7 +121,13 @@ export function saveCurrentUser(user: User) {
     return;
   }
 
-  window.localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(user));
+  const serializedUser = JSON.stringify(user);
+
+  cachedCurrentUserRaw = serializedUser;
+  cachedCurrentUserSnapshot = user;
+
+  window.localStorage.setItem(CURRENT_USER_STORAGE_KEY, serializedUser);
+  window.dispatchEvent(new Event(CURRENT_USER_CHANGED_EVENT));
 }
 
 // Busca o usuario autenticado atual.
@@ -126,12 +140,52 @@ export function getCurrentUser(): User | null {
   const storedUser = window.localStorage.getItem(CURRENT_USER_STORAGE_KEY);
 
   if (!storedUser) {
+    cachedCurrentUserRaw = null;
+    cachedCurrentUserSnapshot = null;
     return null;
   }
 
+  if (storedUser === cachedCurrentUserRaw) {
+    return cachedCurrentUserSnapshot;
+  }
+
   try {
-    return JSON.parse(storedUser) as User;
+    cachedCurrentUserRaw = storedUser;
+    cachedCurrentUserSnapshot = JSON.parse(storedUser) as User;
+
+    return cachedCurrentUserSnapshot;
   } catch {
+    cachedCurrentUserRaw = storedUser;
+    cachedCurrentUserSnapshot = null;
     return null;
   }
+}
+
+// Remove o usuario autenticado atual.
+// O cadastro de usuarios continua salvo; apenas a sessão ativa deixa de existir.
+export function clearCurrentUser() {
+  if (!canUseStorage()) {
+    return;
+  }
+
+  cachedCurrentUserRaw = null;
+  cachedCurrentUserSnapshot = null;
+
+  window.localStorage.removeItem(CURRENT_USER_STORAGE_KEY);
+  window.dispatchEvent(new Event(CURRENT_USER_CHANGED_EVENT));
+}
+
+// Permite que componentes React acompanhem mudancas no usuario atual.
+export function subscribeToCurrentUser(callback: () => void) {
+  if (!canUseStorage()) {
+    return () => undefined;
+  }
+
+  window.addEventListener(CURRENT_USER_CHANGED_EVENT, callback);
+  window.addEventListener("storage", callback);
+
+  return () => {
+    window.removeEventListener(CURRENT_USER_CHANGED_EVENT, callback);
+    window.removeEventListener("storage", callback);
+  };
 }

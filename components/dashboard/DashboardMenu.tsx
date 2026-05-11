@@ -60,6 +60,13 @@ export function DashboardMenu({
 }: DashboardMenuProps) {
   const isPersistent = mode === "persistent";
 
+  // Renderiza a página de configurações dentro do dashboard.
+  // O fluxo continua igual às outras páginas: sem trocar de rota.
+  function openSettingsPage() {
+    onPageChange("Configurações");
+    onClose();
+  }
+
   return (
     <div
       className={`fixed z-[70] h-dvh overscroll-none transition ${
@@ -168,11 +175,16 @@ export function DashboardMenu({
               </div>
             </div>
 
-            {/* Botao de configuracoes. Ele ainda nao abre uma tela; apenas representa a acao. */}
+            {/* Botao de configuracoes. Ele troca apenas o conteudo renderizado no dashboard. */}
             <Button
               type="button"
+              onClick={openSettingsPage}
               variant="translucentAction"
-              className="mt-4 h-11 w-full gap-2 text-sm font-semibold"
+              className={`mt-4 h-11 w-full gap-2 text-sm font-semibold ${
+                currentPage === "Configurações"
+                  ? "bg-[linear-gradient(135deg,rgba(255,150,36,0.22),rgba(255,183,64,0.14))] text-slate-950"
+                  : ""
+              }`}
             >
               <Settings size={16} strokeWidth={2.1} />
               Configurações

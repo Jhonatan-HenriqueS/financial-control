@@ -7,10 +7,15 @@ import { CategoriesContent } from "@/components/dashboard/CategoriesContent";
 import { DashboardBalanceCard } from "@/components/dashboard/DashboardBalanceCard";
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { GastosContent } from "@/components/dashboard/GastosContent";
+import { SettingsContent } from "@/components/dashboard/SettingsContent";
 import { clearAuthSession, hasAuthSession } from "@/lib/session";
 import { getCurrentUser } from "@/lib/storage";
 
-export type DashboardPageKey = "Dashboard" | "Categorias" | "Gastos";
+export type DashboardPageKey =
+  | "Dashboard"
+  | "Categorias"
+  | "Gastos"
+  | "Configurações";
 
 // Conteudo renderizado quando o usuario escolhe Dashboard no menu.
 function DashboardContent() {
@@ -31,6 +36,11 @@ function GastosPageContent() {
   return <GastosContent />;
 }
 
+// Conteudo renderizado quando o usuario escolhe Configurações no menu.
+function ConfiguracoesContent() {
+  return <SettingsContent />;
+}
+
 // Decide qual componente aparece abaixo do header.
 // Essa funcao substitui a troca de rotas por renderizacao condicional de componentes.
 function renderSelectedPage(page: DashboardPageKey) {
@@ -38,6 +48,7 @@ function renderSelectedPage(page: DashboardPageKey) {
     Dashboard: <DashboardContent />,
     Categorias: <CategoriasContent />,
     Gastos: <GastosPageContent />,
+    Configurações: <ConfiguracoesContent />,
   };
 
   return pages[page];

@@ -58,7 +58,7 @@ function AlertDialogContent({
       <AlertDialogPrimitive.Content
         data-slot="alert-dialog-content"
         className={cn(
-          "fixed left-1/2 top-1/2 z-[95] w-[calc(100dvw-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 rounded-[30px] bg-white/86 p-6 shadow-[0_24px_80px_rgba(15,23,42,0.24),0_18px_54px_rgba(255,136,0,0.12)] outline-none backdrop-blur-[30px] data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95",
+          "fixed left-1/2 top-1/2 z-[95] w-[calc(100dvw-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[30px] bg-white/82 p-6 shadow-[0_24px_80px_rgba(15,23,42,0.2),0_18px_54px_rgba(255,136,0,0.16)] outline-none backdrop-blur-[30px] before:pointer-events-none before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_0%_0%,rgba(255,153,45,0.22),transparent_38%),radial-gradient(circle_at_100%_100%,rgba(255,183,64,0.16),transparent_42%),linear-gradient(145deg,rgba(255,255,255,0.9),rgba(255,248,238,0.66))] before:content-[''] [&>*]:relative [&>*]:z-10 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95",
           className,
         )}
         {...props}
