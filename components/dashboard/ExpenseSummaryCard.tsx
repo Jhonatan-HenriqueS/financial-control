@@ -31,10 +31,10 @@ export function ExpenseSummaryCard({
       <div className="relative z-10 flex items-center justify-between gap-5">
         <div className="min-w-0">
           <p className="text-base font-bold text-white/90 sm:text-xl">
-            Soma em {categoryLabel}
+            Total em {categoryLabel}
           </p>
 
-          <p className="mt-4 truncate text-4xl font-extrabold tracking-normal text-white sm:text-4xl lg:text-5xl">
+          <p className="mt-4 truncate text-3xl font-extrabold tracking-normal text-white sm:text-4xl lg:text-5xl">
             {formatCurrency(totalAmountCents)}
           </p>
 
@@ -44,7 +44,7 @@ export function ExpenseSummaryCard({
         </div>
 
         <div className="grid h-20 w-20 shrink-0 place-items-center rounded-[28px] text-white sm:h-28 sm:w-28">
-          <Wallet className="h-13 w-13 sm:h-19 sm:w-19" strokeWidth={1.8} />
+          <Wallet className="h-11 w-11 sm:h-19 sm:w-19" strokeWidth={1.8} />
         </div>
       </div>
     </section>

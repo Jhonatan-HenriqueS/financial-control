@@ -145,9 +145,9 @@ export function GastosContent() {
             {filteredExpenses.map((expense) => (
               <article
                 key={expense.id}
-                className="flex flex-col gap-4 rounded-2xl bg-orange-50/45 p-4 shadow-[0_10px_26px_rgba(255,136,0,0.1),0_10px_24px_rgba(15,23,42,0.05)] sm:flex-row sm:items-center sm:justify-between"
+                className="flex gap-3 rounded-2xl bg-orange-50/45 p-4 shadow-[0_10px_26px_rgba(255,136,0,0.1),0_10px_24px_rgba(15,23,42,0.05)]"
               >
-                <div className="min-w-0">
+                <div className="min-w-0 flex-1">
                   <div className="flex min-w-0 items-center gap-3">
                     <span
                       className="h-7 w-7 shrink-0 rounded-full shadow-[0_5px_12px_rgba(15,23,42,0.12)]"
@@ -163,12 +163,13 @@ export function GastosContent() {
                       </p>
                     </div>
                   </div>
-                </div>
 
-                <div className="flex items-center justify-between gap-3 sm:justify-end">
-                  <p className="text-sm font-extrabold text-slate-950">
+                  <p className="mt-4 text-sm font-extrabold text-slate-950">
                     {formatCurrency(expense.amountCents)}
                   </p>
+                </div>
+
+                <div className="shrink-0 self-start">
                   <ExpenseActionsPopover
                     expense={expense}
                     onDelete={deleteExpense}
