@@ -82,7 +82,7 @@ export function DashboardHeader({
 
   return (
     <>
-      <header className="fixed left-4 right-4 top-4 z-50 overflow-hidden rounded-[28px] bg-white/78 px-4 py-4 shadow-[0_0_0_1px_rgba(255,255,255,0.95),0_18px_55px_rgba(45,35,24,0.12)] backdrop-blur-2xl sm:left-8 sm:right-8 sm:top-6 sm:px-5">
+      <header className="fixed left-4 right-4 top-4 z-50 overflow-hidden rounded-[28px] bg-white/78 px-4 py-4 shadow-[0_0_0_1px_rgba(255,255,255,0.95),0_18px_55px_rgba(45,35,24,0.12)] backdrop-blur-2xl sm:left-8 sm:right-8 sm:top-6 sm:px-5 lg:left-[380px]">
         {/* Fundo interno com os mesmos tons claros e laranja suave do login/cadastro. */}
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_0%_50%,rgba(255,154,42,0.18),transparent_34%),radial-gradient(circle_at_100%_100%,rgba(255,184,54,0.16),transparent_38%),linear-gradient(115deg,rgba(255,255,255,0.95),rgba(255,248,238,0.76))]" />
 
@@ -95,6 +95,7 @@ export function DashboardHeader({
               onClick={openMenu}
               variant="softIcon"
               size="appIcon"
+              className="lg:hidden"
             >
               <Menu size={20} strokeWidth={2.2} />
             </Button>
@@ -136,6 +137,16 @@ export function DashboardHeader({
           onClose={closeMenu}
         />
       ) : null}
+
+      <DashboardMenu
+        isOpen
+        mode="persistent"
+        currentPage={currentPage}
+        onPageChange={onPageChange}
+        userName={currentUserName || "Usuário"}
+        userEmail={currentUserEmail || "email não informado"}
+        onClose={() => undefined}
+      />
     </>
   );
 }

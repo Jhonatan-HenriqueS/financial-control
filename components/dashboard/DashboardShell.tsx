@@ -74,7 +74,7 @@ export function DashboardShell() {
       />
 
       {/* Area reservada para renderizar o conteudo da pagina selecionada no menu. */}
-      <section className="h-full overflow-auto px-4 pb-6 pt-32 sm:px-8 sm:pt-36">
+      <section className="h-full overflow-auto px-4 pb-6 pt-32 sm:px-8 sm:pt-36 lg:pl-[380px]">
         {renderSelectedPage(selectedPage)}
       </section>
     </main>

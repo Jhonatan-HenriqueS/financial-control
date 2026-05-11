@@ -12,6 +12,7 @@ interface DashboardMenuProps {
   userEmail: string;
   onPageChange: (page: DashboardPageKey) => void;
   onClose: () => void;
+  mode?: "overlay" | "persistent";
 }
 
 interface MenuItem {
@@ -46,9 +47,8 @@ function getUserInitials(name: string) {
   return `${first}${second}`.toUpperCase();
 }
 
-// Menu lateral em formato de modal.
-// Ele usa o mesmo comportamento em mobile, tablet e desktop: abre sobre a pagina e desfoca o fundo.
-// A prop isOpen controla a animacao: true vem da esquerda para a direita, false volta da direita para a esquerda.
+// Menu lateral da area logada.
+// Em telas menores funciona como overlay; em desktop fica persistente e sempre visivel.
 export function DashboardMenu({
   isOpen,
   currentPage,
@@ -56,26 +56,41 @@ export function DashboardMenu({
   userEmail,
   onPageChange,
   onClose,
+  mode = "overlay",
 }: DashboardMenuProps) {
+  const isPersistent = mode === "persistent";
+
   return (
     <div
-      className={`fixed inset-0 z-[70] h-dvh w-dvw overflow-hidden overscroll-none transition ${
-        isOpen ? "pointer-events-auto" : "pointer-events-none"
+      className={`fixed z-[70] h-dvh overscroll-none transition ${
+        isPersistent
+          ? "left-0 top-0 hidden w-[380px] overflow-visible pointer-events-auto lg:block"
+          : `inset-0 w-dvw overflow-hidden lg:hidden ${
+              isOpen ? "pointer-events-auto" : "pointer-events-none"
+            }`
       }`}
     >
       {/* Camada que escurece e desfoca a pagina enquanto o menu esta aberto. */}
-      <button
-        type="button"
-        aria-label="Fechar menu"
-        onClick={onClose}
-        className={`absolute inset-0 bg-slate-950/42 backdrop-blur-md transition-opacity duration-200 ease-out ${
-          isOpen ? "opacity-100" : "opacity-0"
-        }`}
-      />
+      {isPersistent ? null : (
+        <button
+          type="button"
+          aria-label="Fechar menu"
+          onClick={onClose}
+          className={`absolute inset-0 bg-slate-950/42 backdrop-blur-md transition-opacity duration-200 ease-out ${
+            isOpen ? "opacity-100" : "opacity-0"
+          }`}
+        />
+      )}
 
       <aside
-        className={`absolute bottom-3 left-3 top-3 w-[min(calc(100dvw-1.5rem),340px)] max-w-[calc(100dvw-1.5rem)] overflow-hidden rounded-[30px] bg-white/48 shadow-[0_24px_80px_rgba(15,23,42,0.28),0_0_0_1px_rgba(255,255,255,0.65)] backdrop-blur-[34px] backdrop-saturate-150 ${
-          isOpen ? "animate-dashboard-menu-enter" : "animate-dashboard-menu-exit"
+        className={`absolute overflow-hidden rounded-[30px] ${
+          isPersistent
+            ? "bottom-4 left-4 top-4 w-[340px] bg-white shadow-[22px_0_86px_-44px_rgba(45,35,24,0.28),0_24px_90px_-50px_rgba(255,132,0,0.24)]"
+            : `bottom-3 left-3 top-3 w-[min(calc(100dvw-1.5rem),340px)] max-w-[calc(100dvw-1.5rem)] bg-white/48 backdrop-blur-[34px] backdrop-saturate-150 ${
+                isOpen
+                  ? "animate-dashboard-menu-enter"
+                  : "animate-dashboard-menu-exit"
+              } shadow-[0_24px_80px_rgba(15,23,42,0.16),0_0_0_1px_rgba(255,255,255,0.65)]`
         }`}
       >
         {/* Fundo do menu com vidro claro e manchas suaves na paleta laranja do projeto. */}
@@ -93,15 +108,17 @@ export function DashboardMenu({
             </div>
 
             {/* Fecha o menu sem navegar para outra pagina. */}
-            <Button
-              type="button"
-              aria-label="Fechar menu"
-              onClick={onClose}
-              variant="ghost"
-              className="h-10 w-10 rounded-2xl text-slate-950 hover:bg-white/45 focus-visible:ring-0 focus-visible:shadow-[0_0_0_5px_rgba(255,154,42,0.15)]"
-            >
-              <X size={18} strokeWidth={2.1} />
-            </Button>
+            {isPersistent ? null : (
+              <Button
+                type="button"
+                aria-label="Fechar menu"
+                onClick={onClose}
+                variant="ghost"
+                className="h-10 w-10 rounded-2xl text-slate-950 hover:bg-white/45 focus-visible:ring-0 focus-visible:shadow-[0_0_0_5px_rgba(255,154,42,0.15)]"
+              >
+                <X size={18} strokeWidth={2.1} />
+              </Button>
+            )}
           </div>
 
           <nav className="mt-10 flex-1 space-y-2">

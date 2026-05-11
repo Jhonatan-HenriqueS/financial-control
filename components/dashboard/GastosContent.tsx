@@ -5,6 +5,7 @@ import { useRef, useState, useSyncExternalStore } from "react";
 import { ExpenseActionsPopover } from "@/components/dashboard/ExpenseActionsPopover";
 import { ExpenseCategoryFilter } from "@/components/dashboard/ExpenseCategoryFilter";
 import { ExpenseModal } from "@/components/dashboard/ExpenseModal";
+import { ExpenseSummaryCard } from "@/components/dashboard/ExpenseSummaryCard";
 import { Button } from "@/components/ui/button";
 import {
   deleteExpense,
@@ -67,6 +68,10 @@ export function GastosContent() {
   const filteredExpenses = selectedCategory
     ? expenses.filter((expense) => expense.categoryId === selectedCategory.id)
     : expenses;
+  const filteredTotalAmountCents = filteredExpenses.reduce(
+    (total, expense) => total + expense.amountCents,
+    0,
+  );
 
   // Abre o modal de criação já no estado visível.
   // Isso evita um pequeno flash antes da animação começar.
@@ -90,6 +95,11 @@ export function GastosContent() {
 
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-col gap-6">
+      <ExpenseSummaryCard
+        totalAmountCents={filteredTotalAmountCents}
+        selectedCategoryName={selectedCategory?.name}
+      />
+
       <section className="rounded-[30px] bg-white p-5 shadow-[0_18px_54px_rgba(255,136,0,0.12),0_22px_65px_rgba(45,35,24,0.08)] sm:p-6">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>

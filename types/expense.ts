@@ -1,5 +1,6 @@
 // Formato de um gasto salvo no localStorage.
-// Ele guarda tambem o nome/cor da categoria para o gasto continuar legivel mesmo se a categoria mudar depois.
+// Ele guarda tambem o nome/cor da categoria para exibir a lista rapidamente.
+// Quando a categoria muda, esses dados sao sincronizados nos gastos existentes.
 export interface Expense {
   id: string;
   name: string;

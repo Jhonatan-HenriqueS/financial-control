@@ -1,4 +1,5 @@
 import type { ExpenseCategory } from "@/types/category";
+import { updateExpensesCategorySnapshot } from "@/lib/expenses";
 
 // Chave que guarda as categorias no localStorage.
 const CATEGORIES_STORAGE_KEY = "financas:expense-categories";
@@ -168,8 +169,21 @@ export function updateCategory(categoryId: string, name: string) {
   const nextCategories = categories.map((category) =>
     category.id === categoryId ? { ...category, name: trimmedName } : category,
   );
+  const updatedCategory = nextCategories.find(
+    (category) => category.id === categoryId,
+  );
 
   saveCategories(nextCategories);
+
+  // Depois de renomear a categoria, atualiza todos os gastos ligados a ela.
+  // Assim a tela de gastos mostra o nome novo imediatamente.
+  if (updatedCategory) {
+    updateExpensesCategorySnapshot(
+      updatedCategory.id,
+      updatedCategory.name,
+      updatedCategory.color,
+    );
+  }
 
   return {
     success: true,

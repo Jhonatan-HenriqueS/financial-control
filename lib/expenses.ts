@@ -143,3 +143,27 @@ export function deleteExpense(expenseId: string) {
 
   saveExpenses(nextExpenses);
 }
+
+// Atualiza a cópia da categoria dentro dos gastos já criados.
+// Cada gasto guarda o id, nome e cor da categoria para exibir rápido na tela;
+// quando a categoria muda, essa função mantém todos os gastos sincronizados.
+export function updateExpensesCategorySnapshot(
+  categoryId: string,
+  categoryName: string,
+  categoryColor?: string,
+) {
+  const expenses = getExpenses();
+  const nextExpenses = expenses.map((expense) => {
+    if (expense.categoryId !== categoryId) {
+      return expense;
+    }
+
+    return {
+      ...expense,
+      categoryName,
+      categoryColor: categoryColor ?? expense.categoryColor,
+    };
+  });
+
+  saveExpenses(nextExpenses);
+}
