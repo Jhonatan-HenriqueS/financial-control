@@ -134,8 +134,8 @@ export function ExpenseCategoryFilter({
       </PopoverTrigger>
 
       <PopoverContent
-        side="top"
-        avoidCollisions={false}
+        side="bottom"
+        avoidCollisions
         align={isFilterInHeaderRow ? "end" : "center"}
         sideOffset={12}
         className="max-w-[calc(100dvw-2rem)] rounded-[28px] bg-white/90 p-4 shadow-[0_24px_70px_rgba(15,23,42,0.16),0_16px_42px_rgba(255,132,0,0.1)] ring-0 backdrop-blur-xl sm:w-[380px]"
