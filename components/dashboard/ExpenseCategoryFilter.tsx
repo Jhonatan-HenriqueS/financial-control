@@ -1,7 +1,7 @@
 "use client";
 
 import { Check, ChevronDown, SlidersHorizontal } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -74,6 +74,7 @@ export function ExpenseCategoryFilter({
   onSelectCategory,
 }: ExpenseCategoryFilterProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isFilterInHeaderRow, setIsFilterInHeaderRow] = useState(false);
   const selectedCategory = categories.find(
     (category) => category.id === selectedCategoryId,
   );
@@ -84,6 +85,23 @@ export function ExpenseCategoryFilter({
     categories,
     selectedCategoryId,
   );
+
+  // O layout coloca o botão na mesma linha do titulo a partir de 640px.
+  // Nesse caso o popover precisa alinhar pela direita; no mobile ele fica centralizado.
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(min-width: 640px)");
+
+    function updateFilterPosition() {
+      setIsFilterInHeaderRow(mediaQuery.matches);
+    }
+
+    updateFilterPosition();
+    mediaQuery.addEventListener("change", updateFilterPosition);
+
+    return () => {
+      mediaQuery.removeEventListener("change", updateFilterPosition);
+    };
+  }, []);
 
   // Seleciona a categoria e fecha o popover para dar retorno imediato ao usuário.
   function handleSelectCategory(categoryId: string | null) {
@@ -116,23 +134,24 @@ export function ExpenseCategoryFilter({
       </PopoverTrigger>
 
       <PopoverContent
-        side="bottom"
+        side="top"
         avoidCollisions={false}
-        align="end"
+        align={isFilterInHeaderRow ? "end" : "center"}
         sideOffset={12}
-        className="w-[min(calc(100dvw-2rem),380px)] rounded-[28px] bg-white/90 p-4 shadow-[0_24px_70px_rgba(15,23,42,0.16),0_16px_42px_rgba(255,132,0,0.1)] ring-0 backdrop-blur-xl"
+        className="max-w-[calc(100dvw-2rem)] rounded-[28px] bg-white/90 p-4 shadow-[0_24px_70px_rgba(15,23,42,0.16),0_16px_42px_rgba(255,132,0,0.1)] ring-0 backdrop-blur-xl sm:w-[380px]"
+        style={{ width: "min(calc(100dvw - 2rem), 380px)" }}
       >
-        <div className="flex items-start justify-between gap-4">
-          <div>
+        <div className="flex min-w-0 items-start justify-between gap-3">
+          <div className="min-w-0">
             <p className="text-xs font-bold uppercase tracking-[0.32em] text-slate-500">
               Filtrar gastos
             </p>
-            <h3 className="mt-3 text-lg font-bold text-slate-950">
+            <h3 className="mt-3 text-lg font-bold leading-7 text-slate-950">
               Escolha uma categoria
             </h3>
           </div>
 
-          <div className="whitespace-nowrap rounded-2xl bg-white/70 px-4 py-2 text-sm font-semibold text-slate-500 shadow-[0_8px_20px_rgba(255,132,0,0.08)]">
+          <div className="shrink-0 whitespace-nowrap rounded-2xl bg-white/70 px-4 py-2 text-sm font-semibold text-slate-500 shadow-[0_8px_20px_rgba(255,132,0,0.08)]">
             {formatResultCount(totalResults)}
           </div>
         </div>
@@ -148,9 +167,9 @@ export function ExpenseCategoryFilter({
                 : "bg-white/52 text-slate-600 hover:bg-white/75"
             }`}
           >
-            <span className="flex items-center gap-3">
+            <span className="flex min-w-0 items-center gap-3">
               <span
-                className={`grid h-9 w-9 place-items-center rounded-2xl ${
+                className={`grid h-9 w-9 shrink-0 place-items-center rounded-2xl ${
                   selectedCategoryId === null
                     ? "bg-[#ff7300]/16"
                     : "bg-slate-950/5"
@@ -158,9 +177,9 @@ export function ExpenseCategoryFilter({
               >
                 <Check size={16} strokeWidth={2.2} />
               </span>
-              <span className="text-sm font-bold">Todas</span>
+              <span className="min-w-0 truncate text-sm font-bold">Todas</span>
             </span>
-            <span className="rounded-full bg-white/70 px-3 py-1 text-xs font-bold text-slate-500">
+            <span className="shrink-0 rounded-full bg-white/70 px-3 py-1 text-xs font-bold text-slate-500">
               {expenses.length}
             </span>
           </Button>
@@ -192,7 +211,7 @@ export function ExpenseCategoryFilter({
                       {category.name}
                     </span>
                   </span>
-                  <span className="rounded-full bg-white/70 px-3 py-1 text-xs font-bold text-slate-500">
+                  <span className="shrink-0 rounded-full bg-white/70 px-3 py-1 text-xs font-bold text-slate-500">
                     {count}
                   </span>
                 </Button>
