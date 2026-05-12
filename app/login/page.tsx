@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useState, useSyncExternalStore } from "react";
 import { useRouter } from "next/navigation";
 import { AuthButton } from "@/components/auth/AuthButton";
 import { AuthCard } from "@/components/auth/AuthCard";
@@ -19,6 +19,11 @@ import {
 
 export default function LoginPage() {
   const router = useRouter();
+  const isBrowserReady = useSyncExternalStore(
+    () => () => undefined,
+    () => true,
+    () => false,
+  );
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -27,18 +32,24 @@ export default function LoginPage() {
     password: "",
   });
 
-  // Se ja existe usuario salvo no navegador, recria o cookie de sessao e entra no dashboard.
-  // Isso evita que a pessoa logada volte para a tela de login ao abrir o mesmo link de novo.
-  useEffect(() => {
-    const currentUser = getCurrentUser();
+  const currentUser = isBrowserReady ? getCurrentUser() : null;
 
+  // Se ja existe usuario salvo no navegador, recria o cookie de sessao e entra no dashboard.
+  // Enquanto essa checagem acontece, a tela de login nao aparece para evitar flash visual.
+  useEffect(() => {
     if (!currentUser) {
       return;
     }
 
     createAuthSession(currentUser);
     router.replace("/dashboard");
-  }, [router]);
+  }, [currentUser, router]);
+
+  // Antes de o navegador confirmar o localStorage, renderizamos uma tela vazia.
+  // Se houver usuario logado, ele sera redirecionado sem ver o formulario por milissegundos.
+  if (!isBrowserReady || currentUser) {
+    return <main className="min-h-dvh w-full bg-white" />;
+  }
 
   //Altera o State com a mensagem do erro, ou seja, se a validação não passar, uma das mensagens é emitida
 

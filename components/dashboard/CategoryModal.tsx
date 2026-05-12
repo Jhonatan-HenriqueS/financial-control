@@ -23,6 +23,14 @@ export function CategoryModal({
   onSubmit,
 }: CategoryModalProps) {
   const [categoryName, setCategoryName] = useState(category?.name ?? "");
+  const isEditing = Boolean(category);
+  const modalTitle = isEditing
+    ? "Edite o setor de seu gasto"
+    : "Crie o setor de seu gasto";
+  const modalDescription = isEditing
+    ? "Atualize o nome desta categoria para manter seus gastos organizados no setor correto."
+    : "Crie esta categoria para organizar para em qual setor o seu dinheiro está indo.";
+  const submitLabel = isEditing ? "Salvar categoria" : "Criar categoria";
 
   // Envia apenas o nome digitado para a tela pai.
   // A tela pai decide se deve criar ou editar a categoria.
@@ -54,10 +62,10 @@ export function CategoryModal({
           <div className="flex items-start justify-between gap-6">
             <div>
               <p className="text-sm font-bold uppercase tracking-[0.32em] text-[#ff7300]">
-                {category ? "Editar categoria" : "Nova categoria"}
+                {isEditing ? "Editar categoria" : "Nova categoria"}
               </p>
               <h3 className="mt-4 text-2xl font-bold text-slate-950 sm:text-3xl">
-                Crie o setor de seu gasto
+                {modalTitle}
               </h3>
             </div>
 
@@ -74,8 +82,7 @@ export function CategoryModal({
           </div>
 
           <p className="mt-6 text-base font-medium leading-8 text-slate-600">
-            Crie esta categoria para organizar para em qual setor o seu dinheiro
-            está indo.
+            {modalDescription}
           </p>
 
           <form className="mt-8 space-y-6" onSubmit={handleSubmit} noValidate>
@@ -106,7 +113,7 @@ export function CategoryModal({
               variant="sun"
               size="form"
             >
-              {category ? "Salvar categoria" : "Criar categoria"}
+              {submitLabel}
             </Button>
           </form>
         </div>

@@ -32,7 +32,7 @@ export function ExpenseSummaryCard({
       {/* Brilhos suaves para deixar o laranja com profundidade sem parecer bloco chapado. */}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_12%_0%,rgba(255,255,255,0.26),transparent_32%),radial-gradient(circle_at_90%_100%,rgba(255,255,255,0.18),transparent_38%)]" />
 
-      <div className="relative z-10 flex items-center justify-between gap-5">
+      <div className="relative z-10 flex items-center justify-between ">
         <div className="min-w-0">
           <p className="text-base font-bold text-white/90 sm:text-xl">
             {cardTitle}
