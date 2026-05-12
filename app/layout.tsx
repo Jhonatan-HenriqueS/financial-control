@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Poppins, Geist } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { Toaster } from "@/components/ui/sonner";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
@@ -30,7 +31,15 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className={cn("h-full", "antialiased", poppins.variable, "font-sans", geist.variable)}>
       {/* body recebe a fonte global e ocupa a altura minima da tela. */}
-      <body className="min-h-full font-sans">{children}</body>
+      <body className="min-h-full font-sans">
+        <Toaster
+          position="top-right"
+          duration={2600}
+          visibleToasts={4}
+          closeButton
+        />
+        {children}
+      </body>
     </html>
   );
 }

@@ -2,6 +2,7 @@
 
 import { Plus } from "lucide-react";
 import { useRef, useState, useSyncExternalStore } from "react";
+import { toast } from "sonner";
 import { ExpenseActionsPopover } from "@/components/dashboard/ExpenseActionsPopover";
 import { ExpenseCategoryFilter } from "@/components/dashboard/ExpenseCategoryFilter";
 import { ExpenseModal } from "@/components/dashboard/ExpenseModal";
@@ -86,6 +87,12 @@ export function GastosContent() {
     }, EXPENSE_MODAL_ANIMATION_MS);
   }
 
+  // Exclui o gasto e mostra o toast apenas depois da ação ser concluída.
+  function handleDeleteExpense(expenseId: string) {
+    deleteExpense(expenseId);
+    toast.success("Gasto excluído com sucesso.");
+  }
+
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-col gap-6">
       <ExpenseSummaryCard
@@ -165,7 +172,7 @@ export function GastosContent() {
                 <div className="shrink-0 self-start">
                   <ExpenseActionsPopover
                     expense={expense}
-                    onDelete={deleteExpense}
+                    onDelete={handleDeleteExpense}
                   />
                 </div>
               </article>

@@ -2,6 +2,7 @@
 
 import { Plus, RefreshCcw } from "lucide-react";
 import { useRef, useState, useSyncExternalStore } from "react";
+import { toast } from "sonner";
 import { BalanceAmountModal } from "@/components/dashboard/BalanceAmountModal";
 import { ExpenseSummaryCard } from "@/components/dashboard/ExpenseSummaryCard";
 import { Button } from "@/components/ui/button";
@@ -86,8 +87,14 @@ export function DashboardBalanceCard() {
   function handleSaveBalance(amountCents: number) {
     if (modalMode === "add") {
       addBalanceCents(amountCents);
+      toast.success("Saldo adicionado com sucesso.");
     } else {
       setBalanceCents(amountCents);
+      toast.success(
+        modalMode === "define"
+          ? "Saldo definido com sucesso."
+          : "Saldo alterado com sucesso.",
+      );
     }
 
     closeAmountModal();

@@ -58,12 +58,12 @@ export function PasswordInput({
           aria-label={isVisible ? "Ocultar senha" : "Mostrar senha"}
           onClick={() => setIsVisible((current) => !current)}
           variant="ghost"
-          className="ml-3 h-10 w-10 rounded-full p-2 text-[#7b7f84] hover:bg-orange-50 hover:text-[#ff7300] focus-visible:ring-0 focus-visible:shadow-[0_0_0_4px_rgba(255,122,0,0.14)]"
+          className="ml-3 h-12 w-12 rounded-full p-0 text-[#7b7f84] hover:bg-orange-50 hover:text-[#ff7300] focus-visible:ring-0 focus-visible:shadow-[0_0_0_4px_rgba(255,122,0,0.14)] sm:h-14 sm:w-14 [&_svg]:!h-6 [&_svg]:!w-6 sm:[&_svg]:!h-7 sm:[&_svg]:!w-7"
         >
           {isVisible ? (
-            <EyeOffIcon className="h-6 w-6" />
+            <EyeOffIcon />
           ) : (
-            <EyeIcon className="h-6 w-6" />
+            <EyeIcon />
           )}
         </Button>
       </div>

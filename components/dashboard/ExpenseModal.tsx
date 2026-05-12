@@ -2,6 +2,7 @@
 
 import { CalendarDays, Tags, X } from "lucide-react";
 import { FormEvent, useRef, useState } from "react";
+import { toast } from "sonner";
 import { ExpenseCategoryModal } from "@/components/dashboard/ExpenseCategoryModal";
 import { ExpenseDateModal } from "@/components/dashboard/ExpenseDateModal";
 import { Button } from "@/components/ui/button";
@@ -131,6 +132,7 @@ export function ExpenseModal({
       return;
     }
 
+    toast.success("Gasto criado com sucesso.");
     onClose();
   }
 

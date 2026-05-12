@@ -2,6 +2,7 @@
 
 import { Plus } from "lucide-react";
 import { useRef, useState, useSyncExternalStore } from "react";
+import { toast } from "sonner";
 import { CategoryActionsPopover } from "@/components/dashboard/CategoryActionsPopover";
 import { CategoryModal } from "@/components/dashboard/CategoryModal";
 import {
@@ -78,6 +79,7 @@ export function CategoriesContent() {
 
   // Salva uma categoria nova ou atualiza a categoria em edicao.
   function handleCategorySubmit(categoryName: string) {
+    const isEditingCategory = Boolean(editingCategory);
     const result = editingCategory
       ? updateCategory(editingCategory.id, categoryName)
       : createCategory(categoryName);
@@ -87,7 +89,18 @@ export function CategoriesContent() {
       return;
     }
 
+    toast.success(
+      isEditingCategory
+        ? "Categoria editada com sucesso."
+        : "Categoria criada com sucesso.",
+    );
     closeModal();
+  }
+
+  // Exclui a categoria e mostra confirmação visual somente depois da remoção.
+  function handleDeleteCategory(categoryId: string) {
+    deleteCategory(categoryId);
+    toast.success("Categoria excluída com sucesso.");
   }
 
   return (
@@ -139,7 +152,7 @@ export function CategoriesContent() {
                 <CategoryActionsPopover
                   category={category}
                   onEdit={openEditModal}
-                  onDelete={deleteCategory}
+                  onDelete={handleDeleteCategory}
                 />
               </article>
             ))}
