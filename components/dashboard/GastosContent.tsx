@@ -15,6 +15,7 @@ import {
   subscribeToExpenses,
 } from "@/lib/expenses";
 import { getCategories, subscribeToCategories } from "@/lib/categories";
+import { getBalanceCents, subscribeToBalance } from "@/lib/balance";
 import type { ExpenseCategory } from "@/types/category";
 import type { Expense } from "@/types/expense";
 
@@ -29,6 +30,7 @@ const EXPENSE_MODAL_ANIMATION_MS = 180;
 // Snapshot usado enquanto o servidor renderiza.
 const getServerExpensesSnapshot = () => EMPTY_EXPENSES;
 const getServerCategoriesSnapshot = () => EMPTY_CATEGORIES;
+const getServerBalanceSnapshot = () => null;
 
 // Mostra a data salva como yyyy-mm-dd no formato brasileiro dd/mm/aaaa.
 function formatDateLabel(dateKey: string) {
@@ -50,6 +52,11 @@ export function GastosContent() {
     getCategories,
     getServerCategoriesSnapshot,
   );
+  const balanceCents = useSyncExternalStore(
+    subscribeToBalance,
+    getBalanceCents,
+    getServerBalanceSnapshot,
+  );
   const closeTimerRef = useRef<number | null>(null);
   const [isModalMounted, setIsModalMounted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -66,6 +73,17 @@ export function GastosContent() {
     (total, expense) => total + expense.amountCents,
     0,
   );
+  const currentLimitCents = selectedCategory
+    ? selectedCategory.limitCents
+    : balanceCents;
+  const summaryLimitText =
+    currentLimitCents !== null && currentLimitCents !== undefined
+      ? `Limite: ${formatCurrency(currentLimitCents)}`
+      : "Limite: não definido";
+  const hasExceededLimit =
+    currentLimitCents !== null &&
+    currentLimitCents !== undefined &&
+    filteredTotalAmountCents > currentLimitCents;
 
   // Abre o modal de criação já no estado visível.
   // Isso evita um pequeno flash antes da animação começar.
@@ -98,6 +116,8 @@ export function GastosContent() {
       <ExpenseSummaryCard
         totalAmountCents={filteredTotalAmountCents}
         selectedCategoryName={selectedCategory?.name}
+        subtitle={summaryLimitText}
+        isAmountNegative={hasExceededLimit}
       />
 
       <section className="rounded-[30px] bg-white p-5 shadow-[0_18px_54px_rgba(255,136,0,0.12),0_22px_65px_rgba(45,35,24,0.08)] sm:p-6">

@@ -75,7 +75,7 @@ export function SettingsContent() {
       <section className="mt-8">
         <button
           type="button"
-          className="grid min-h-36 w-full grid-cols-[auto_1fr] gap-5 rounded-[28px] bg-orange-50/70 p-7 text-left shadow-[0_16px_42px_rgba(255,132,0,0.1),0_18px_48px_rgba(45,35,24,0.06)] transition-all duration-300 hover:scale-[1.01] hover:bg-orange-100/70 hover:shadow-[0_18px_48px_rgba(255,132,0,0.14),0_20px_54px_rgba(45,35,24,0.08)] focus:outline-none focus-visible:shadow-[0_0_0_5px_rgba(255,154,42,0.16),0_18px_48px_rgba(255,132,0,0.14)] sm:min-h-44 sm:p-8"
+          className="grid h-26 w-full grid-cols-[auto_1fr] gap-5 rounded-[28px] bg-orange-50/70 p-7 text-left shadow-[0_16px_42px_rgba(255,132,0,0.1),0_18px_48px_rgba(45,35,24,0.06)] transition-all duration-300 hover:scale-[1.01] hover:bg-orange-100/70 hover:shadow-[0_18px_48px_rgba(255,132,0,0.14),0_20px_54px_rgba(45,35,24,0.08)] focus:outline-none focus-visible:shadow-[0_0_0_5px_rgba(255,154,42,0.16),0_18px_48px_rgba(255,132,0,0.14)] sm:min-h-36 sm:p-8"
         >
           <div className="grid h-13 w-13 shrink-0 place-items-center self-start text-[#ff6500]">
             <CircleDollarSign size={25} strokeWidth={2.1} />
@@ -90,7 +90,7 @@ export function SettingsContent() {
 
       <Separator className="my-10" />
 
-      <section className="mt-8">
+      <section className="mt-4">
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <Button
@@ -113,7 +113,11 @@ export function SettingsContent() {
 
             <AlertDialogFooter>
               <AlertDialogCancel asChild>
-                <Button type="button" variant="whiteAction" className="h-11 px-5">
+                <Button
+                  type="button"
+                  variant="whiteAction"
+                  className="h-11 px-5"
+                >
                   Cancelar
                 </Button>
               </AlertDialogCancel>

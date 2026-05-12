@@ -104,6 +104,10 @@ export function DashboardBalanceCard() {
     <>
       <ExpenseSummaryCard
         title="Limite disponível"
+
+
+
+        
         totalAmountCents={availableBalanceCents}
         subtitle={`Saldo inicial: ${formatCurrency(balanceCents ?? 0)}`}
         isAmountNegative={availableBalanceCents < 0}
@@ -113,9 +117,9 @@ export function DashboardBalanceCard() {
               <PopoverTrigger asChild>
                 <Button
                   type="button"
-                  className="mt-6 h-12 rounded-2xl bg-white/72 px-6 text-sm font-bold text-[#c84f00] shadow-[0_10px_24px_rgba(255,255,255,0.18)] backdrop-blur-sm hover:scale-[1.02] hover:bg-white/84 hover:text-[#a94200] hover:shadow-[0_12px_28px_rgba(255,255,255,0.24)] sm:text-base"
+                  className="mt-6 h-12 rounded-2xl bg-white/38 px-6 text-sm text-[#ff6500] shadow-[0_10px_24px_rgba(255,255,255,0.14)] backdrop-blur-sm hover:scale-[1.02] hover:bg-white/48 hover:text-[#e45f00] hover:shadow-[0_12px_28px_rgba(255,255,255,0.18)] sm:text-base"
                 >
-                  Atualizar saldo
+                  <span className="font-bold">Atualizar saldo</span>
                 </Button>
               </PopoverTrigger>
 
@@ -149,7 +153,7 @@ export function DashboardBalanceCard() {
             <Button
               type="button"
               onClick={() => openAmountModal("define")}
-              className="mt-6 h-12 rounded-2xl bg-white/72 px-6 text-sm font-bold text-[#c84f00] shadow-[0_10px_24px_rgba(255,255,255,0.18)] backdrop-blur-sm hover:scale-[1.02] hover:bg-white/84 hover:text-[#a94200] hover:shadow-[0_12px_28px_rgba(255,255,255,0.24)] sm:text-base"
+              className="mt-6 h-12 rounded-2xl bg-white/38 px-6 text-sm font-bold text-[#ff6500] shadow-[0_10px_24px_rgba(255,255,255,0.14)] backdrop-blur-sm hover:scale-[1.02] hover:bg-white/48 hover:text-[#e45f00] hover:shadow-[0_12px_28px_rgba(255,255,255,0.18)] sm:text-base"
             >
               Definir saldo
             </Button>

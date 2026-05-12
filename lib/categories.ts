@@ -102,8 +102,8 @@ function generateUniqueCategoryColor(categories: ExpenseCategory[]) {
 }
 
 // Cria uma categoria nova para gastos.
-// Ela ja nasce com uma cor unica para ficar facil de identificar na lista.
-export function createCategory(name: string) {
+// Ela ja nasce com uma cor unica e pode receber um limite de gastos opcional.
+export function createCategory(name: string, limitCents?: number | null) {
   const categories = getCategories();
   const trimmedName = name.trim();
 
@@ -130,6 +130,7 @@ export function createCategory(name: string) {
     id: crypto.randomUUID(),
     name: trimmedName,
     color: generateUniqueCategoryColor(categories),
+    limitCents: limitCents ?? null,
   };
 
   saveCategories([...categories, nextCategory]);
@@ -140,9 +141,13 @@ export function createCategory(name: string) {
   };
 }
 
-// Edita apenas o nome da categoria.
+// Edita o nome e o limite da categoria.
 // A cor nao muda para manter a identidade visual da categoria.
-export function updateCategory(categoryId: string, name: string) {
+export function updateCategory(
+  categoryId: string,
+  name: string,
+  limitCents?: number | null,
+) {
   const categories = getCategories();
   const trimmedName = name.trim();
 
@@ -167,7 +172,9 @@ export function updateCategory(categoryId: string, name: string) {
   }
 
   const nextCategories = categories.map((category) =>
-    category.id === categoryId ? { ...category, name: trimmedName } : category,
+    category.id === categoryId
+      ? { ...category, name: trimmedName, limitCents: limitCents ?? null }
+      : category,
   );
   const updatedCategory = nextCategories.find(
     (category) => category.id === categoryId,

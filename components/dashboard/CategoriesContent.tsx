@@ -5,6 +5,7 @@ import { useRef, useState, useSyncExternalStore } from "react";
 import { toast } from "sonner";
 import { CategoryActionsPopover } from "@/components/dashboard/CategoryActionsPopover";
 import { CategoryModal } from "@/components/dashboard/CategoryModal";
+import { formatCurrency } from "@/lib/currency";
 import {
   createCategory,
   deleteCategory,
@@ -78,11 +79,11 @@ export function CategoriesContent() {
   }
 
   // Salva uma categoria nova ou atualiza a categoria em edicao.
-  function handleCategorySubmit(categoryName: string) {
+  function handleCategorySubmit(categoryName: string, limitCents: number | null) {
     const isEditingCategory = Boolean(editingCategory);
     const result = editingCategory
-      ? updateCategory(editingCategory.id, categoryName)
-      : createCategory(categoryName);
+      ? updateCategory(editingCategory.id, categoryName, limitCents)
+      : createCategory(categoryName, limitCents);
 
     if (!result.success) {
       setMessage(result.message);
@@ -144,9 +145,17 @@ export function CategoriesContent() {
                     style={{ backgroundColor: category.color }}
                     aria-hidden="true"
                   />
-                  <p className="min-w-0 truncate text-sm font-semibold text-slate-950">
-                    {category.name}
-                  </p>
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-semibold text-slate-950">
+                      {category.name}
+                    </p>
+                    {category.limitCents !== null &&
+                    category.limitCents !== undefined ? (
+                      <p className="mt-1 truncate text-xs font-semibold text-slate-500">
+                        Limite: {formatCurrency(category.limitCents)}
+                      </p>
+                    ) : null}
+                  </div>
                 </div>
 
                 <CategoryActionsPopover

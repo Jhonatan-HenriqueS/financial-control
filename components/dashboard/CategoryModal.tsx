@@ -3,6 +3,7 @@
 import { X } from "lucide-react";
 import { FormEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { parseCurrencyToCents } from "@/lib/currency";
 import type { ExpenseCategory } from "@/types/category";
 
 interface CategoryModalProps {
@@ -10,7 +11,20 @@ interface CategoryModalProps {
   errorMessage?: string;
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (categoryName: string) => void;
+  onSubmit: (categoryName: string, limitCents: number | null) => void;
+}
+
+// Mostra centavos em formato simples de input brasileiro.
+// O valor começa legível quando a categoria já possui limite salvo.
+function formatInitialLimit(limitCents?: number | null) {
+  if (limitCents === null || limitCents === undefined) {
+    return "";
+  }
+
+  return (limitCents / 100).toLocaleString("pt-BR", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
 }
 
 // Modal usado para criar ou editar uma categoria.
@@ -23,6 +37,9 @@ export function CategoryModal({
   onSubmit,
 }: CategoryModalProps) {
   const [categoryName, setCategoryName] = useState(category?.name ?? "");
+  const [categoryLimit, setCategoryLimit] = useState(
+    formatInitialLimit(category?.limitCents),
+  );
   const isEditing = Boolean(category);
   const modalTitle = isEditing
     ? "Edite o setor de seu gasto"
@@ -36,7 +53,11 @@ export function CategoryModal({
   // A tela pai decide se deve criar ou editar a categoria.
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    onSubmit(categoryName);
+    const limitCents = categoryLimit.trim()
+      ? parseCurrencyToCents(categoryLimit)
+      : null;
+
+    onSubmit(categoryName, limitCents);
   }
 
   return (
@@ -108,11 +129,30 @@ export function CategoryModal({
               ) : null}
             </div>
 
-            <Button
-              type="submit"
-              variant="sun"
-              size="form"
-            >
+            <div className="space-y-3">
+              <label
+                htmlFor="category-limit"
+                className="text-base font-semibold text-slate-950"
+              >
+                Limite da categoria
+              </label>
+              <div className="mt-3 flex h-14 items-center rounded-2xl bg-white/78 px-5 shadow-[0_10px_26px_rgba(255,136,0,0.08)] transition-all duration-200 focus-within:shadow-[0_0_0_5px_rgba(255,154,42,0.18),0_14px_34px_rgba(255,112,0,0.2)]">
+                <span className="mr-2 text-base font-bold text-slate-950">
+                  R$
+                </span>
+                <input
+                  id="category-limit"
+                  type="text"
+                  inputMode="decimal"
+                  value={categoryLimit}
+                  onChange={(event) => setCategoryLimit(event.target.value)}
+                  placeholder="100,00"
+                  className="min-w-0 flex-1 bg-transparent text-base font-medium text-slate-950 outline-none placeholder:text-slate-400"
+                />
+              </div>
+            </div>
+
+            <Button type="submit" variant="sun" size="form">
               {submitLabel}
             </Button>
           </form>
