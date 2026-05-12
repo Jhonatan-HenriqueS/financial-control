@@ -1,13 +1,19 @@
 "use client";
 
-import { Plus } from "lucide-react";
+import { CalendarDays, Plus } from "lucide-react";
 import { useRef, useState, useSyncExternalStore } from "react";
 import { toast } from "sonner";
 import { ExpenseActionsPopover } from "@/components/dashboard/ExpenseActionsPopover";
 import { ExpenseCategoryFilter } from "@/components/dashboard/ExpenseCategoryFilter";
 import { ExpenseModal } from "@/components/dashboard/ExpenseModal";
 import { ExpenseSummaryCard } from "@/components/dashboard/ExpenseSummaryCard";
+import { MonthlyExpenseModal } from "@/components/dashboard/MonthlyExpenseModal";
 import { Button } from "@/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { formatCurrency } from "@/lib/currency";
 import {
   deleteExpense,
@@ -58,8 +64,12 @@ export function GastosContent() {
     getServerBalanceSnapshot,
   );
   const closeTimerRef = useRef<number | null>(null);
+  const monthlyCloseTimerRef = useRef<number | null>(null);
+  const [isCreatePopoverOpen, setIsCreatePopoverOpen] = useState(false);
   const [isModalMounted, setIsModalMounted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isMonthlyModalMounted, setIsMonthlyModalMounted] = useState(false);
+  const [isMonthlyModalOpen, setIsMonthlyModalOpen] = useState(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
     null,
   );
@@ -92,6 +102,7 @@ export function GastosContent() {
       window.clearTimeout(closeTimerRef.current);
     }
 
+    setIsCreatePopoverOpen(false);
     setIsModalMounted(true);
     setIsModalOpen(true);
   }
@@ -102,6 +113,26 @@ export function GastosContent() {
 
     closeTimerRef.current = window.setTimeout(() => {
       setIsModalMounted(false);
+    }, EXPENSE_MODAL_ANIMATION_MS);
+  }
+
+  // Abre o modal visual de gasto mensal a partir do popover do botão principal.
+  function openMonthlyExpenseModal() {
+    if (monthlyCloseTimerRef.current) {
+      window.clearTimeout(monthlyCloseTimerRef.current);
+    }
+
+    setIsCreatePopoverOpen(false);
+    setIsMonthlyModalMounted(true);
+    setIsMonthlyModalOpen(true);
+  }
+
+  // Fecha o modal de gasto mensal respeitando a animação de saída.
+  function closeMonthlyExpenseModal() {
+    setIsMonthlyModalOpen(false);
+
+    monthlyCloseTimerRef.current = window.setTimeout(() => {
+      setIsMonthlyModalMounted(false);
     }, EXPENSE_MODAL_ANIMATION_MS);
   }
 
@@ -132,15 +163,43 @@ export function GastosContent() {
             </p>
           </div>
 
-          <Button
-            type="button"
-            onClick={openCreateExpenseModal}
-            variant="sun"
-            size="cta"
+          <Popover
+            open={isCreatePopoverOpen}
+            onOpenChange={setIsCreatePopoverOpen}
           >
-            Criar gasto
-            <Plus size={18} strokeWidth={2.2} />
-          </Button>
+            <PopoverTrigger asChild>
+              <Button type="button" variant="sun" size="cta">
+                Criar gasto
+                <Plus size={18} strokeWidth={2.2} />
+              </Button>
+            </PopoverTrigger>
+
+            <PopoverContent
+              side="top"
+              align="end"
+              sideOffset={10}
+              className="w-56 rounded-2xl bg-white/88 p-2 shadow-[0_18px_48px_rgba(15,23,42,0.16),0_14px_34px_rgba(255,136,0,0.1)] ring-0 backdrop-blur-xl"
+            >
+              <Button
+                type="button"
+                variant="whiteAction"
+                size="actionRow"
+                onClick={openCreateExpenseModal}
+              >
+                <Plus size={15} strokeWidth={2.1} />
+                Criar gasto
+              </Button>
+              <Button
+                type="button"
+                variant="whiteAction"
+                size="actionRow"
+                onClick={openMonthlyExpenseModal}
+              >
+                <CalendarDays size={15} strokeWidth={2.1} />
+                Criar gasto mensal
+              </Button>
+            </PopoverContent>
+          </Popover>
         </div>
       </section>
 
@@ -219,6 +278,13 @@ export function GastosContent() {
           categories={categories}
           isOpen={isModalOpen}
           onClose={closeCreateExpenseModal}
+        />
+      ) : null}
+
+      {isMonthlyModalMounted ? (
+        <MonthlyExpenseModal
+          isOpen={isMonthlyModalOpen}
+          onClose={closeMonthlyExpenseModal}
         />
       ) : null}
     </div>
