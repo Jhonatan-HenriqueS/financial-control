@@ -1,4 +1,8 @@
-import type { CreateExpenseInput, Expense } from "@/types/expense";
+import type {
+  CreateExpenseInput,
+  CreateMonthlyExpenseInput,
+  Expense,
+} from "@/types/expense";
 
 // Chave usada para guardar os gastos no localStorage.
 const EXPENSES_STORAGE_KEY = "financas:expenses";
@@ -121,6 +125,7 @@ export function createExpense(input: CreateExpenseInput) {
     name: trimmedName,
     amountCents: input.amountCents,
     date: input.date,
+    createdAt: new Date().toISOString(),
     categoryId: input.categoryId,
     categoryName: input.categoryName,
     categoryColor: input.categoryColor,
@@ -131,6 +136,65 @@ export function createExpense(input: CreateExpenseInput) {
   return {
     success: true,
     message: "Gasto criado com sucesso.",
+  };
+}
+
+// Cria um gasto mensal sem automatizar recorrência ainda.
+// O texto de recorrência fica salvo para aparecer no card do gasto.
+export function createMonthlyExpense(input: CreateMonthlyExpenseInput) {
+  const trimmedName = input.name.trim();
+
+  if (!trimmedName) {
+    return {
+      success: false,
+      message: "Informe o nome do gasto mensal.",
+    };
+  }
+
+  if (!Number.isFinite(input.amountCents) || input.amountCents <= 0) {
+    return {
+      success: false,
+      message: "Informe um valor de gasto mensal válido.",
+    };
+  }
+
+  if (!input.recurrenceLabel.trim()) {
+    return {
+      success: false,
+      message: "Informe quando o gasto mensal será renovado.",
+    };
+  }
+
+  if (!input.categoryId) {
+    return {
+      success: false,
+      message: "Selecione uma categoria para o gasto mensal.",
+    };
+  }
+
+  const today = new Date();
+  const date = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(
+    2,
+    "0",
+  )}-${String(today.getDate()).padStart(2, "0")}`;
+  const nextExpense: Expense = {
+    id: crypto.randomUUID(),
+    name: trimmedName,
+    amountCents: input.amountCents,
+    date,
+    createdAt: new Date().toISOString(),
+    categoryId: input.categoryId,
+    categoryName: input.categoryName,
+    categoryColor: input.categoryColor,
+    isMonthly: true,
+    recurrenceLabel: input.recurrenceLabel.trim(),
+  };
+
+  saveExpenses([nextExpense, ...getExpenses()]);
+
+  return {
+    success: true,
+    message: "Gasto mensal criado com sucesso.",
   };
 }
 

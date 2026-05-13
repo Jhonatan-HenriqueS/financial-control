@@ -7,6 +7,7 @@ interface ExpenseSummaryCardProps {
   selectedCategoryName?: string;
   title?: string;
   subtitle?: string;
+  secondarySubtitle?: string;
   actionLabel?: string;
   actionSlot?: ReactNode;
   isAmountNegative?: boolean;
@@ -20,6 +21,7 @@ export function ExpenseSummaryCard({
   selectedCategoryName,
   title,
   subtitle,
+  secondarySubtitle,
   actionLabel = "Em breve...",
   actionSlot,
   isAmountNegative = false,
@@ -49,6 +51,12 @@ export function ExpenseSummaryCard({
           {subtitle ? (
             <p className="mt-3 text-sm font-semibold text-white/68 sm:text-base">
               {subtitle}
+            </p>
+          ) : null}
+
+          {secondarySubtitle ? (
+            <p className="mt-1 text-sm font-semibold text-white/68 sm:text-base">
+              {secondarySubtitle}
             </p>
           ) : null}
 

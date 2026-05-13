@@ -1,9 +1,10 @@
 "use client";
 
-import { Plus, RefreshCcw } from "lucide-react";
-import { useRef, useState, useSyncExternalStore } from "react";
+import { CalendarClock, Plus, RefreshCcw } from "lucide-react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { toast } from "sonner";
 import { BalanceAmountModal } from "@/components/dashboard/BalanceAmountModal";
+import { BalanceResetModal } from "@/components/dashboard/BalanceResetModal";
 import { ExpenseSummaryCard } from "@/components/dashboard/ExpenseSummaryCard";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,7 +14,9 @@ import {
 } from "@/components/ui/popover";
 import {
   addBalanceCents,
+  applyDueBalanceReset,
   getBalanceCents,
+  getBalanceResetConfig,
   setBalanceCents,
   subscribeToBalance,
 } from "@/lib/balance";
@@ -27,6 +30,10 @@ type BalanceModalMode = "define" | "add" | "update";
 // Como localStorage só existe no navegador, o saldo começa como null.
 const getServerBalanceSnapshot = () => null;
 
+// Snapshot da regra de renovação no servidor.
+// A regra real só pode ser lida depois que o navegador está disponível.
+const getServerBalanceResetSnapshot = () => null;
+
 // Lista vazia fixa para os gastos durante a renderização no servidor.
 const EMPTY_EXPENSES: Expense[] = [];
 
@@ -36,6 +43,20 @@ const getServerExpensesSnapshot = () => EMPTY_EXPENSES;
 // Tempo da animação do modal de saldo.
 const BALANCE_MODAL_ANIMATION_MS = 180;
 
+// Converte a data do gasto em um ponto no tempo.
+// Gastos antigos que ainda não tinham createdAt usam a data do gasto como fallback.
+function getExpenseCreatedTime(expense: Expense) {
+  const createdTime = expense.createdAt
+    ? new Date(expense.createdAt).getTime()
+    : Number.NaN;
+
+  if (Number.isFinite(createdTime)) {
+    return createdTime;
+  }
+
+  return new Date(`${expense.date}T00:00:00`).getTime();
+}
+
 // Card principal da página Dashboard.
 // Ele mostra o limite disponível e permite definir, adicionar ou alterar saldo.
 export function DashboardBalanceCard() {
@@ -44,22 +65,48 @@ export function DashboardBalanceCard() {
     getBalanceCents,
     getServerBalanceSnapshot,
   );
+  const resetConfig = useSyncExternalStore(
+    subscribeToBalance,
+    getBalanceResetConfig,
+    getServerBalanceResetSnapshot,
+  );
   const expenses = useSyncExternalStore(
     subscribeToExpenses,
     getExpenses,
     getServerExpensesSnapshot,
   );
   const closeTimerRef = useRef<number | null>(null);
+  const resetCloseTimerRef = useRef<number | null>(null);
   const [isActionsOpen, setIsActionsOpen] = useState(false);
   const [isModalMounted, setIsModalMounted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isResetModalMounted, setIsResetModalMounted] = useState(false);
+  const [isResetModalOpen, setIsResetModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<BalanceModalMode>("define");
   const hasBalance = balanceCents !== null;
-  const totalExpensesCents = expenses.reduce(
+  const cycleStartTime = resetConfig
+    ? new Date(
+        resetConfig.lastResetAt ?? `${resetConfig.lastResetDate}T00:00:00`,
+      ).getTime()
+    : null;
+  const cycleExpenses =
+    cycleStartTime === null
+      ? expenses
+      : expenses.filter(
+          (expense) => getExpenseCreatedTime(expense) >= cycleStartTime,
+        );
+  const totalExpensesCents = cycleExpenses.reduce(
     (total, expense) => total + expense.amountCents,
     0,
   );
   const availableBalanceCents = (balanceCents ?? 0) - totalExpensesCents;
+  const balanceSubtitle = `Saldo inicial: ${formatCurrency(balanceCents ?? 0)}`;
+
+  // Ao carregar o dashboard, verifica se a regra de renovação já venceu.
+  // Se venceu, os gastos antigos saem do ciclo atual e o saldo volta ao valor inicial.
+  useEffect(() => {
+    applyDueBalanceReset();
+  }, []);
 
   // Abre o modal na ação pedida.
   // O mesmo formulário recebe o valor e a função de salvar decide o que fazer.
@@ -80,6 +127,26 @@ export function DashboardBalanceCard() {
 
     closeTimerRef.current = window.setTimeout(() => {
       setIsModalMounted(false);
+    }, BALANCE_MODAL_ANIMATION_MS);
+  }
+
+  // Abre o modal que configura a renovação automática do saldo.
+  function openResetModal() {
+    if (resetCloseTimerRef.current) {
+      window.clearTimeout(resetCloseTimerRef.current);
+    }
+
+    setIsActionsOpen(false);
+    setIsResetModalMounted(true);
+    setIsResetModalOpen(true);
+  }
+
+  // Fecha o modal de renovação depois da animação.
+  function closeResetModal() {
+    setIsResetModalOpen(false);
+
+    resetCloseTimerRef.current = window.setTimeout(() => {
+      setIsResetModalMounted(false);
     }, BALANCE_MODAL_ANIMATION_MS);
   }
 
@@ -104,12 +171,9 @@ export function DashboardBalanceCard() {
     <>
       <ExpenseSummaryCard
         title="Limite disponível"
-
-
-
-        
         totalAmountCents={availableBalanceCents}
-        subtitle={`Saldo inicial: ${formatCurrency(balanceCents ?? 0)}`}
+        subtitle={balanceSubtitle}
+        secondarySubtitle={resetConfig?.label}
         isAmountNegative={availableBalanceCents < 0}
         actionSlot={
           hasBalance ? (
@@ -147,6 +211,15 @@ export function DashboardBalanceCard() {
                   <RefreshCcw size={15} strokeWidth={2.1} />
                   Alterar saldo
                 </Button>
+                <Button
+                  type="button"
+                  variant="whiteAction"
+                  size="actionRow"
+                  onClick={openResetModal}
+                >
+                  <CalendarClock size={15} strokeWidth={2.1} />
+                  Renovar saldo
+                </Button>
               </PopoverContent>
             </Popover>
           ) : (
@@ -167,6 +240,14 @@ export function DashboardBalanceCard() {
           mode={modalMode}
           onClose={closeAmountModal}
           onSubmit={handleSaveBalance}
+        />
+      ) : null}
+
+      {isResetModalMounted ? (
+        <BalanceResetModal
+          currentLabel={resetConfig?.label}
+          isOpen={isResetModalOpen}
+          onClose={closeResetModal}
         />
       ) : null}
     </>

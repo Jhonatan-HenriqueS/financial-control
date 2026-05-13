@@ -196,7 +196,7 @@ export function GastosContent() {
                 onClick={openMonthlyExpenseModal}
               >
                 <CalendarDays size={15} strokeWidth={2.1} />
-                Criar gasto mensal
+                Criar gasto fixo
               </Button>
             </PopoverContent>
           </Popover>
@@ -240,6 +240,11 @@ export function GastosContent() {
                       <p className="mt-1 truncate text-xs font-semibold text-slate-500">
                         {expense.categoryName} • {formatDateLabel(expense.date)}
                       </p>
+                      {expense.recurrenceLabel ? (
+                        <p className="mt-1 truncate text-xs font-semibold text-[#ff6500]">
+                          {expense.recurrenceLabel}
+                        </p>
+                      ) : null}
                     </div>
                   </div>
 
@@ -283,6 +288,7 @@ export function GastosContent() {
 
       {isMonthlyModalMounted ? (
         <MonthlyExpenseModal
+          categories={categories}
           isOpen={isMonthlyModalOpen}
           onClose={closeMonthlyExpenseModal}
         />

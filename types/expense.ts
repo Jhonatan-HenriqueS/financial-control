@@ -6,9 +6,12 @@ export interface Expense {
   name: string;
   amountCents: number;
   date: string;
+  createdAt?: string;
   categoryId: string;
   categoryName: string;
   categoryColor: string;
+  isMonthly?: boolean;
+  recurrenceLabel?: string;
 }
 
 // Dados que o formulario envia para criar um gasto novo.
@@ -17,6 +20,17 @@ export interface CreateExpenseInput {
   name: string;
   amountCents: number;
   date: string;
+  categoryId: string;
+  categoryName: string;
+  categoryColor: string;
+}
+
+// Dados usados para criar um gasto mensal.
+// A recorrência ainda é apenas informativa e aparece no card do gasto.
+export interface CreateMonthlyExpenseInput {
+  name: string;
+  amountCents: number;
+  recurrenceLabel: string;
   categoryId: string;
   categoryName: string;
   categoryColor: string;
