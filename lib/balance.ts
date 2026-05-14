@@ -1,3 +1,5 @@
+import { archiveCommonExpensesForRenewal } from "@/lib/expenses";
+
 // Chave usada para guardar o saldo disponível no localStorage.
 const BALANCE_STORAGE_KEY = "financas:available-balance";
 
@@ -13,6 +15,7 @@ export interface BalanceResetConfig {
   label: string;
   lastResetDate: string;
   lastResetAt?: string;
+  scheduledFromDate?: string;
 }
 
 // Cache usado pelo useSyncExternalStore.
@@ -176,26 +179,30 @@ export function addBalanceCents(amountCents: number) {
 // Salva uma renovação por intervalo fixo de dias.
 export function setBalanceResetByPeriod(days: number) {
   const now = new Date();
+  const currentConfig = getBalanceResetConfig();
 
   saveBalanceResetConfig({
     mode: "period",
     value: days,
     label: `Renova a cada ${days} dias`,
     lastResetDate: formatDateKey(now),
-    lastResetAt: now.toISOString(),
+    lastResetAt: currentConfig?.lastResetAt,
+    scheduledFromDate: formatDateKey(now),
   });
 }
 
 // Salva uma renovação em um dia específico de cada mês.
 export function setBalanceResetByMonthDay(day: number) {
   const now = new Date();
+  const currentConfig = getBalanceResetConfig();
 
   saveBalanceResetConfig({
     mode: "monthDay",
     value: day,
     label: `Renova todo dia ${day} de cada mês`,
     lastResetDate: formatDateKey(now),
-    lastResetAt: now.toISOString(),
+    lastResetAt: currentConfig?.lastResetAt,
+    scheduledFromDate: formatDateKey(now),
   });
 }
 
@@ -204,14 +211,17 @@ export function setBalanceResetByMonthDay(day: number) {
 // uma marcação manual é criada para iniciar um novo ciclo agora.
 export function renewBalanceNow() {
   const now = new Date();
+  const renewedAt = now.toISOString();
   const currentConfig = getBalanceResetConfig();
+
+  archiveCommonExpensesForRenewal(renewedAt);
 
   saveBalanceResetConfig({
     mode: currentConfig?.mode ?? "manual",
     value: currentConfig?.value ?? 0,
     label: currentConfig?.label ?? "Saldo renovado manualmente",
     lastResetDate: formatDateKey(now),
-    lastResetAt: now.toISOString(),
+    lastResetAt: renewedAt,
   });
 }
 
@@ -227,6 +237,8 @@ export function applyDueBalanceReset() {
   const today = new Date();
   const todayKey = formatDateKey(today);
   const resetMoment = new Date();
+  const renewedAt = resetMoment.toISOString();
+  const scheduledFromDate = config.scheduledFromDate ?? config.lastResetDate;
   let nextResetDateKey: string | null = null;
 
   if (
@@ -243,8 +255,15 @@ export function applyDueBalanceReset() {
       parseDateKey(occurrenceDateKey).getTime();
     const reachedOccurrence =
       parseDateKey(todayKey).getTime() >= parseDateKey(occurrenceDateKey).getTime();
+    const occurrenceHappenedAfterSchedule =
+      parseDateKey(occurrenceDateKey).getTime() >
+      parseDateKey(scheduledFromDate).getTime();
 
-    if (reachedOccurrence && !alreadyResetThisOccurrence) {
+    if (
+      reachedOccurrence &&
+      occurrenceHappenedAfterSchedule &&
+      !alreadyResetThisOccurrence
+    ) {
       nextResetDateKey = occurrenceDateKey;
     }
   }
@@ -253,10 +272,12 @@ export function applyDueBalanceReset() {
     return false;
   }
 
+  archiveCommonExpensesForRenewal(renewedAt);
+
   saveBalanceResetConfig({
     ...config,
     lastResetDate: nextResetDateKey,
-    lastResetAt: resetMoment.toISOString(),
+    lastResetAt: renewedAt,
   });
 
   return true;

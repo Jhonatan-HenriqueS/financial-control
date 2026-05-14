@@ -4,7 +4,10 @@ import { CalendarDays, Plus } from "lucide-react";
 import { useRef, useState, useSyncExternalStore } from "react";
 import { toast } from "sonner";
 import { ExpenseActionsPopover } from "@/components/dashboard/ExpenseActionsPopover";
-import { ExpenseCategoryFilter } from "@/components/dashboard/ExpenseCategoryFilter";
+import {
+  ExpenseCategoryFilter,
+  type ExpenseKindFilter,
+} from "@/components/dashboard/ExpenseCategoryFilter";
 import { ExpenseModal } from "@/components/dashboard/ExpenseModal";
 import { ExpenseSummaryCard } from "@/components/dashboard/ExpenseSummaryCard";
 import { MonthlyExpenseModal } from "@/components/dashboard/MonthlyExpenseModal";
@@ -73,12 +76,46 @@ export function GastosContent() {
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
     null,
   );
+  const [selectedExpenseKind, setSelectedExpenseKind] =
+    useState<ExpenseKindFilter>("all");
   const selectedCategory = categories.find(
     (category) => category.id === selectedCategoryId,
   );
-  const filteredExpenses = selectedCategory
+  const categoryScopedExpenses = selectedCategory
     ? expenses.filter((expense) => expense.categoryId === selectedCategory.id)
     : expenses;
+  const expenseKindFilteredExpenses =
+    selectedExpenseKind === "all"
+      ? expenses
+      : expenses.filter((expense) =>
+          selectedExpenseKind === "fixed"
+            ? expense.isMonthly
+            : !expense.isMonthly,
+        );
+  const filteredExpenses = selectedCategory
+    ? expenseKindFilteredExpenses.filter(
+        (expense) => expense.categoryId === selectedCategory.id,
+      )
+    : expenseKindFilteredExpenses;
+  const selectedExpenseKindEmptyLabel =
+    selectedExpenseKind === "fixed" ? "gasto fixo" : "gasto";
+  const expenseListTitle = selectedCategory
+    ? `Gastos em ${selectedCategory.name}`
+    : selectedExpenseKind === "all"
+      ? "Todos os gastos"
+      : selectedExpenseKind === "fixed"
+        ? "Gastos fixos"
+        : "Gastos";
+  const emptyTitle = selectedCategory
+    ? `Nenhum ${selectedExpenseKindEmptyLabel} em ${selectedCategory.name}.`
+    : selectedExpenseKind === "fixed"
+      ? "Nenhum gasto fixo criado ainda."
+      : selectedExpenseKind === "normal"
+        ? "Nenhum gasto comum criado ainda."
+        : "Nenhum gasto criado ainda.";
+  const emptyDescription = selectedCategory
+    ? "Escolha outra categoria ou registre um gasto para este setor."
+    : "Clique em “Criar gasto” para registrar sua primeira despesa.";
   const filteredTotalAmountCents = filteredExpenses.reduce(
     (total, expense) => total + expense.amountCents,
     0,
@@ -206,16 +243,17 @@ export function GastosContent() {
       <section className="rounded-[28px] bg-white p-4 shadow-[0_16px_50px_rgba(255,136,0,0.1),0_18px_55px_rgba(45,35,24,0.07)] sm:p-5">
         <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-sm font-bold text-slate-950">
-            {selectedCategory
-              ? `Gastos em ${selectedCategory.name}`
-              : "Todos os gastos"}
+            {expenseListTitle}
           </p>
 
           <ExpenseCategoryFilter
             categories={categories}
-            expenses={expenses}
+            expenses={expenseKindFilteredExpenses}
+            expenseKindScope={categoryScopedExpenses}
+            selectedExpenseKind={selectedExpenseKind}
             selectedCategoryId={selectedCategoryId}
             onSelectCategory={setSelectedCategoryId}
+            onSelectExpenseKind={setSelectedExpenseKind}
           />
         </div>
 
@@ -265,14 +303,10 @@ export function GastosContent() {
         ) : (
           <div className="flex min-h-44 flex-col items-center justify-center rounded-3xl bg-orange-50/70 px-4 text-center">
             <p className="text-sm font-bold text-slate-950">
-              {selectedCategory
-                ? `Nenhum gasto em ${selectedCategory.name}.`
-                : "Nenhum gasto criado ainda."}
+              {emptyTitle}
             </p>
             <p className="mt-2 max-w-md text-sm font-medium leading-6 text-slate-500">
-              {selectedCategory
-                ? "Escolha outra categoria ou registre um gasto para este setor."
-                : "Clique em “Criar gasto” para registrar sua primeira despesa."}
+              {emptyDescription}
             </p>
           </div>
         )}

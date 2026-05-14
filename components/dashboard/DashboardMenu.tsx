@@ -1,6 +1,13 @@
 "use client";
 
-import { Folder, LayoutDashboard, Settings, WalletCards, X } from "lucide-react";
+import {
+  Folder,
+  History,
+  LayoutDashboard,
+  Settings,
+  WalletCards,
+  X,
+} from "lucide-react";
 import type { ComponentType } from "react";
 import { Button } from "@/components/ui/button";
 import type { DashboardPageKey } from "@/components/dashboard/DashboardShell";
@@ -34,6 +41,10 @@ const menuItems: MenuItem[] = [
   {
     icon: WalletCards,
     label: "Gastos",
+  },
+  {
+    icon: History,
+    label: "Histórico",
   },
 ];
 

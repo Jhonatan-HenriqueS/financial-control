@@ -84,10 +84,8 @@ export function DashboardBalanceCard() {
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<BalanceModalMode>("define");
   const hasBalance = balanceCents !== null;
-  const cycleStartTime = resetConfig
-    ? new Date(
-        resetConfig.lastResetAt ?? `${resetConfig.lastResetDate}T00:00:00`,
-      ).getTime()
+  const cycleStartTime = resetConfig?.lastResetAt
+    ? new Date(resetConfig.lastResetAt).getTime()
     : null;
   const cycleExpenses =
     cycleStartTime === null
@@ -173,7 +171,6 @@ export function DashboardBalanceCard() {
         title="Limite disponível"
         totalAmountCents={availableBalanceCents}
         subtitle={balanceSubtitle}
-        secondarySubtitle={resetConfig?.label}
         isAmountNegative={availableBalanceCents < 0}
         actionSlot={
           hasBalance ? (

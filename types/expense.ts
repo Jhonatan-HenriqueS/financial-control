@@ -14,6 +14,13 @@ export interface Expense {
   recurrenceLabel?: string;
 }
 
+// Gasto comum arquivado quando o saldo é renovado.
+// Ele sai da lista atual e passa a aparecer na página Histórico.
+export interface ArchivedExpense extends Expense {
+  archivedAt: string;
+  renewalNumber?: number;
+}
+
 // Dados que o formulario envia para criar um gasto novo.
 // O valor ja chega em centavos para evitar problemas com casas decimais.
 export interface CreateExpenseInput {
@@ -34,4 +41,13 @@ export interface CreateMonthlyExpenseInput {
   categoryId: string;
   categoryName: string;
   categoryColor: string;
+}
+
+// Dados usados para editar um gasto existente.
+// Gasto comum usa nome e valor; gasto fixo também pode atualizar a recorrência.
+export interface UpdateExpenseInput {
+  id: string;
+  name: string;
+  amountCents: number;
+  recurrenceLabel?: string;
 }

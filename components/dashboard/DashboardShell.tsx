@@ -7,6 +7,7 @@ import { CategoriesContent } from "@/components/dashboard/CategoriesContent";
 import { DashboardBalanceCard } from "@/components/dashboard/DashboardBalanceCard";
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { GastosContent } from "@/components/dashboard/GastosContent";
+import { HistoryContent } from "@/components/dashboard/HistoryContent";
 import { SettingsContent } from "@/components/dashboard/SettingsContent";
 import { clearAuthSession, hasAuthSession } from "@/lib/session";
 import { getCurrentUser } from "@/lib/storage";
@@ -15,6 +16,7 @@ export type DashboardPageKey =
   | "Dashboard"
   | "Categorias"
   | "Gastos"
+  | "Histórico"
   | "Configurações";
 
 // Conteudo renderizado quando o usuario escolhe Dashboard no menu.
@@ -36,6 +38,11 @@ function GastosPageContent() {
   return <GastosContent />;
 }
 
+// Conteudo renderizado quando o usuario escolhe Histórico no menu.
+function HistoricoContent() {
+  return <HistoryContent />;
+}
+
 // Conteudo renderizado quando o usuario escolhe Configurações no menu.
 function ConfiguracoesContent() {
   return <SettingsContent />;
@@ -48,6 +55,7 @@ function renderSelectedPage(page: DashboardPageKey) {
     Dashboard: <DashboardContent />,
     Categorias: <CategoriasContent />,
     Gastos: <GastosPageContent />,
+    Histórico: <HistoricoContent />,
     Configurações: <ConfiguracoesContent />,
   };
 
